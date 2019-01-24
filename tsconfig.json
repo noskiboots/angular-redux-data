@@ -17,6 +17,20 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ratify": [
+        "dist/ratify"
+      ],
+      "ratify/*": [
+        "dist/ratify/*"
+      ],
+      "rx-data": [
+        "dist/rx-data"
+      ],
+      "rx-data/*": [
+        "dist/rx-data/*"
+      ]
+    }
   }
 }

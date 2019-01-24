@@ -19,13 +19,13 @@ describe('AppComponent', () => {
   it(`should have as title 'ngx-rx-data'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('ngx-rx-data');
+    expect(app.title).toEqual('ngx-angular-redux-data');
   });
 
   it('should render title in a h1 tag', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to ngx-rx-data!');
+    expect(compiled.querySelector('h1').textContent).toContain('Welcome to ngx-angular-redux-data!');
   });
 });
