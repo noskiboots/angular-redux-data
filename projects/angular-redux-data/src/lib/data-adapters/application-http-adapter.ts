@@ -5,6 +5,7 @@ import {Store} from '@ngrx/store';
 import {catchError, filter, map} from 'rxjs/operators';
 import {RequestConfiguration} from './request-configuration';
 import {HttpAction} from './http-action';
+import * as inflection from 'inflection';
 
 export class ApplicationHttpAdapter extends DataAdapter {
 
@@ -57,7 +58,7 @@ export class ApplicationHttpAdapter extends DataAdapter {
                             config: RequestConfiguration,
                             data?: any,
                             id?: number | string): Observable<any> {
-        const url = `${this._host}${this._path ? `/${this._path}` : ''}/${this.inflection.pluralize(type).toLowerCase()}`;
+        const url = `${this._host}${this._path ? `/${this._path}` : ''}/${inflection.pluralize(type).toLowerCase()}`;
         const headers = config && config.headers ? config.headers : new HttpHeaders().set('Content-Type', 'json/application');
         const options = {headers, params: config ? config.parameters : {}};
         switch (action) {
