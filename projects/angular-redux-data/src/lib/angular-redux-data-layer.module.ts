@@ -12,17 +12,17 @@ import {HttpClientModule} from '@angular/common/http';
         DataLayerService,
     ]
 })
-export class DataLayerModule {
+export class AngularReduxDataLayerModule {
     static forRoot(dataLayerConfig: DataLayerConfig): ModuleWithProviders {
         return {
-            ngModule: DataLayerModule,
+            ngModule: AngularReduxDataLayerModule,
             providers: [
                 {provide: DataLayerConfig, useValue: dataLayerConfig}
             ]
         };
     }
 
-    constructor(@Optional() @SkipSelf() parentModule: DataLayerModule) {
+    constructor(@Optional() @SkipSelf() parentModule: AngularReduxDataLayerModule) {
         if (parentModule) {
             throw new Error(
                 'CoreModule is already loaded. Import it in the AppModule only');

@@ -5,9 +5,6 @@ export const entities = [
     'comment'
 ];
 
-
-
-
 export interface ApplicationState {
-    uiState: UiState
+    uiState: UiState;
 }

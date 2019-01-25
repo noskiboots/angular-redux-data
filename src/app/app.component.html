@@ -1,17 +1,13 @@
-<div>
-  <h1>Posts</h1>
-  <ul>
-    <li *ngFor="let post of Posts">
-      <h2>{{post.title}}</h2>
-      <i>By: {{post.author}}</i>
-      <p>{{post.body}}</p>
-      <h3>Comments</h3>
-      <ul>
+<div *ngIf="post">
+    <h1>Post:{{post.id}}</h1>
+    <h2>{{post.title}}</h2>
+    <i>By: {{post.author}}</i>
+    <p>{{post.body}}</p>
+    <h3>Comments</h3>
+    <ul *ngIf="post.comments">
         <li *ngFor="let comment of post.comments">
-          <span style="border: 1px solid lightgrey">{{comment.body}}</span>
+            <span style="border: 1px solid lightgrey">{{comment.body}}</span>
         </li>
-      </ul>
-    </li>
-  </ul>
+    </ul>
 </div>
 

@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ApplicationState} from './rx-data.config';
-import {RxDataSelectorsService} from '../../projects/angular-redux-data/src/lib/rx-data-services/rx-data.selectors.service';
-import {RxDataActionsService} from '../../projects/angular-redux-data/src/lib/rx-data-services/rx-data.actions.service';
+import {ReduxDataSelectorsService} from '../../projects/angular-redux-data/src/lib/redux-data-services/redux-data.selectors.service';
+import {ReduxDataActionsService} from '../../projects/angular-redux-data/src/lib/redux-data-services/redux-data.actions.service';
 import {select, Store} from '@ngrx/store';
-import {filter} from 'rxjs/operators';
 import {Post} from '../../shared/post';
-import {Observable} from 'rxjs/Rx';
+import {filter} from 'rxjs/operators';
 
 @Component({
     selector: 'app-root',
@@ -13,37 +12,28 @@ import {Observable} from 'rxjs/Rx';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    title = 'ngx-angular-redux-data';
-    posts: Post[] = [];
+    title = 'angular-redux-data';
+    post: Post;
 
-    constructor(private _actionsService: RxDataActionsService,
-                private _entitySelectorsService: RxDataSelectorsService,
+    constructor(private _actionsService: ReduxDataActionsService,
+                private _entitySelectorsService: ReduxDataSelectorsService,
                 private _store: Store<ApplicationState>) {
     }
 
     ngOnInit() {
-        this._store.dispatch(new this._actionsService.actions['comment'].FindAll('comments'));
+        this._store.dispatch(new this._actionsService.actions['post'].FindRecord('posts', 1));
         this._store.pipe(
-            select(this._entitySelectorsService.getSelector('comment').selectAll()),
-            filter(comments => !!comments))
-            .subscribe(comments$ => {
-                if (comments$.length > 0) {
-                    const postRequests = comments$.map(comment$ => {
-                        this._store.dispatch(new this._actionsService.actions['post'].FindRecord('posts', comment$.postId));
-                        return this._store.pipe(
-                            select(this._entitySelectorsService.getSelector('post').selectById(comment$.postId))
-                        );
-
+            select(this._entitySelectorsService.getSelector('post').selectById(1)),
+            filter(item => !!item))
+            .subscribe(post$ => {
+                this._store.dispatch(new this._actionsService.actions['comment'].QueryAll('comments', {'postId': post$.id}));
+                this._store.pipe(
+                    select(this._entitySelectorsService.getSelector('comment').selectAll()),
+                    filter(items => !!items && items.length > 0))
+                    .subscribe((comments$) => {
+                        post$['comments'] = comments$;
+                        this.post = post$ as Post;
                     });
-                    Observable.from(postRequests).combineAll()
-                        .pipe(filter(posts => !!posts))
-                        .subscribe((posts$) => {
-                            posts$.forEach(post$ => {
-                                post$['comments'] = comments$.filter(comment$ => comment$.postId === post$['id']);
-                            });
-                            this.posts = posts$ as Post[];
-                        });
-                }
             });
     }
 }

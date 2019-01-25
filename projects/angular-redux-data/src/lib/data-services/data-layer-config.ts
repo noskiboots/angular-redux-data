@@ -6,7 +6,7 @@ class AdapterMap {
 }
 
 export class DataLayerConfig {
-    entities: string[];
+    entityNameSpaces: string[];
     entityAdapterMappings: any;
     defaultHost: string;
     defaultPath: string;

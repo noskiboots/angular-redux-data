@@ -57,7 +57,7 @@ export class ApplicationHttpAdapter extends DataAdapter {
                             config: RequestConfiguration,
                             data?: any,
                             id?: number | string): Observable<any> {
-        const url = `${this._host}${this._path ? `/${this._path}` : ''}/${this.inflector.pluralize(type).toLowerCase()}`;
+        const url = `${this._host}${this._path ? `/${this._path}` : ''}/${this.inflection.pluralize(type).toLowerCase()}`;
         const headers = config && config.headers ? config.headers : new HttpHeaders().set('Content-Type', 'json/application');
         const options = {headers, params: config ? config.parameters : {}};
         switch (action) {

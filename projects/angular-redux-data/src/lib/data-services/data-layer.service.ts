@@ -11,7 +11,7 @@ export class DataLayerService {
     constructor(@Optional() dataLayerConfig: DataLayerConfig,
                 protected _http: HttpClient,
                 private _store: Store<any>) {
-        dataLayerConfig.entities.forEach(entity => {
+        dataLayerConfig.entityNameSpaces.forEach(entity => {
             const customerAdapter = dataLayerConfig.entityAdapterMappings[entity];
             if (!!customerAdapter) {
                 this.adapters[entity] = new customerAdapter.adapter(

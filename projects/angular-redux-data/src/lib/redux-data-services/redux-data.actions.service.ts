@@ -1,10 +1,10 @@
 import {Injectable, Optional} from '@angular/core';
-import * as entityActions from '../rx-data-utilities/rx-data.actions';
-import {getEntityActionStrings} from '../rx-data-utilities/rx-data.actions.utils';
+import * as entityActions from '../redux-data-utilities/redux-data.actions';
+import {getEntityActionStrings} from '../redux-data-utilities/redux-data.actions.strings';
 import {Actions, ofType} from '@ngrx/effects';
 import {Action} from '@ngrx/store';
 import {map, switchMap} from 'rxjs/operators';
-import {RxDataServiceConfig} from './rx-data-service-config';
+import {ReduxDataServiceConfig} from './redux-data-service-config';
 import {Observable} from 'rxjs';
 import {DataLayerService} from '../data-services/data-layer.service';
 
@@ -15,7 +15,7 @@ export class EntityActions {
 @Injectable({
     providedIn: 'root',
 })
-export class RxDataActionsService {
+export class ReduxDataActionsService {
     private _actions = [];
     private _entityNameSpaces = [];
 
@@ -23,7 +23,7 @@ export class RxDataActionsService {
         return this._actions;
     }
 
-    constructor(@Optional() entityConfig: RxDataServiceConfig) {
+    constructor(@Optional() entityConfig: ReduxDataServiceConfig) {
         if (entityConfig) {
             this._entityNameSpaces = entityConfig.entityNameSpaces;
             this.actionsFactory();
@@ -94,7 +94,7 @@ export class RxDataActionsService {
             .pipe(
                 ofType(this.actions[resourceType].actionStrings.QUERY_ALL),
                 switchMap((action) => {
-                    return dataLayerService.adapters[resourceType].queryAll(action['resource'], action['params']);
+                    return dataLayerService.adapters[resourceType].queryAll(action['resource'], {parameters: action['params']});
                 }),
                 map(data$ => {
                     return new this.actions[resourceType].AddAll(resourceType, data$);

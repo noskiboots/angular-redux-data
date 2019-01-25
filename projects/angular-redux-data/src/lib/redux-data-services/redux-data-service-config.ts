@@ -1,3 +1,3 @@
-export class RxDataServiceConfig {
+export class ReduxDataServiceConfig {
     entityNameSpaces: string[] = [];
 }

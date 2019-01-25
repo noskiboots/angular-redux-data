@@ -1,7 +1,6 @@
-import * as inflection from 'inflection';
-import {ActionReducerMap, createFeatureSelector} from '@ngrx/store';
+import {ActionReducerMap, createFeatureSelector, MemoizedSelector} from '@ngrx/store';
 import {createEntityAdapter} from '@ngrx/entity';
-import {getEntityActionStrings} from '../rx-data-utilities/rx-data.actions.utils';
+import {getEntityActionStrings} from '../redux-data-utilities/redux-data.actions.strings';
 
 export class EntityReducer {
     actionStrings;
@@ -14,8 +13,9 @@ export class EntityReducer {
         this.actionStrings = actionStrings;
         this.nameSpace = nameSpace;
         this.adapter = createEntityAdapter();
-        this.initialState = this.adapter.getInitialState();
-        this['reducer'] = (state = createEntityAdapter().getInitialState(), action) => {
+        const _initialState = this.adapter.getInitialState();
+        this.initialState = _initialState;
+        this['reducer'] = (state = _initialState, action) => {
             return this._reducer(state, action);
         };
     }
@@ -36,7 +36,7 @@ export class EntityReducer {
     }
 }
 
-export class RxDataReducerFactory {
+export class ReduxDataReducerFactory {
     static getReducers(nameSpaceArray: string[], customReducers?) {
         const dynamicEntityReducers: ActionReducerMap<any> = {};
         nameSpaceArray.forEach(nameSpace => {

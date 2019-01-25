@@ -6,7 +6,7 @@ import * as inflection from 'inflection';
 
 
 export abstract class DataAdapter {
-    protected inflector = inflection;
+    protected inflection = inflection;
 
     abstract findAll(type: string, config?: {}): Observable<any[]>;
 

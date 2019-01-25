@@ -1,5 +1,6 @@
-import { Action } from '@ngrx/store';
-import { getEntityActionStrings } from './rx-data.actions.utils';
+import {Action} from '@ngrx/store';
+import {getEntityActionStrings} from './redux-data.actions.strings';
+import {EntityActions} from '../redux-data-services/redux-data.actions.service';
 
 
 export class FindAll implements Action {
@@ -95,7 +96,7 @@ export class UpdateFail implements Action {
 
     constructor(public resource: string,
                 public data: any) {
-        this.type = getEntityActionStrings(resource).UPDATE_FAIL
+        this.type = getEntityActionStrings(resource).UPDATE_FAIL;
     }
 }
 
@@ -113,7 +114,7 @@ export class CreateFail implements Action {
 
     constructor(public resource: string,
                 public data: any) {
-        this.type = getEntityActionStrings(resource).CREATE_FAIL
+        this.type = getEntityActionStrings(resource).CREATE_FAIL;
     }
 }
 
@@ -131,7 +132,7 @@ export class DeleteFail implements Action {
 
     constructor(public resource: string,
                 public data: any) {
-        this.type = getEntityActionStrings(resource).DELETE_FAIL
+        this.type = getEntityActionStrings(resource).DELETE_FAIL;
     }
 }
 
@@ -154,7 +155,7 @@ export class Error implements Action {
     }
 }
 
-export type RxDataActions = Create
+export type ReduxDataActions = Create
     | Update
     | Delete
     | FindAll
@@ -162,4 +163,6 @@ export type RxDataActions = Create
     | AddAll
     | AddOne
     | Success
+    | EntityActions;
+
 
