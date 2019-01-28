@@ -9,5 +9,11 @@
             <span style="border: 1px solid lightgrey">{{comment.body}}</span>
         </li>
     </ul>
+
+    <br><br>
+    <h2>Services</h2>
+    <ul>
+        <li *ngFor="let client of clients">{{client | json}}</li>
+    </ul>
 </div>
 

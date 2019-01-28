@@ -5,6 +5,7 @@ import {ReduxDataActionsService} from '../../projects/angular-redux-data/src/lib
 import {select, Store} from '@ngrx/store';
 import {Post} from '../../shared/post';
 import {filter} from 'rxjs/operators';
+import {Client} from '../../shared/client';
 
 @Component({
     selector: 'app-root',
@@ -14,13 +15,14 @@ import {filter} from 'rxjs/operators';
 export class AppComponent implements OnInit {
     title = 'angular-redux-data';
     post: Post;
-
+    clients: Client[] = [];
     constructor(private _actionsService: ReduxDataActionsService,
                 private _entitySelectorsService: ReduxDataSelectorsService,
                 private _store: Store<ApplicationState>) {
     }
 
     ngOnInit() {
+        this._store.dispatch(new this._actionsService.actions['client'].FindAll('clients'));
         this._store.dispatch(new this._actionsService.actions['post'].FindRecord('posts', 1));
         this._store.pipe(
             select(this._entitySelectorsService.getSelector('post').selectById(1)),
@@ -34,6 +36,13 @@ export class AppComponent implements OnInit {
                         post$['comments'] = comments$;
                         this.post = post$ as Post;
                     });
+            });
+        this._store.pipe(
+            select(this._entitySelectorsService.getSelector('client').selectAll()),
+            filter(items => !!items))
+            .subscribe(clients$ => {
+                debugger;
+                this.clients = clients$;
             });
     }
 }

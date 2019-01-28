@@ -4,7 +4,6 @@ import {DataLayerService} from './data-services/data-layer.service';
 import {DataLayerConfig} from './data-services/data-layer-config';
 import {HttpClientModule} from '@angular/common/http';
 
-
 @NgModule({
     imports: [CommonModule,
         HttpClientModule],

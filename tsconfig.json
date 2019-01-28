@@ -4,7 +4,7 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
-    "declaration": false,
+    "declaration": true,
     "module": "es2015",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -19,17 +19,11 @@
       "dom"
     ],
     "paths": {
-      "ratify": [
-        "dist/ratify"
+      "angular-redux-data": [
+        "dist/angular-redux-data"
       ],
-      "ratify/*": [
-        "dist/ratify/*"
-      ],
-      "rx-data": [
-        "dist/rx-data"
-      ],
-      "rx-data/*": [
-        "dist/rx-data/*"
+      "angular-redux-data/*": [
+        "dist/angular-redux-data/*"
       ]
     }
   }

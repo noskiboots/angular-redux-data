@@ -2,7 +2,8 @@ import {UiState} from './redux/features/uiState/ui-state';
 
 export const entities = [
     'post',
-    'comment'
+    'comment',
+    'client'
 ];
 
 export interface ApplicationState {

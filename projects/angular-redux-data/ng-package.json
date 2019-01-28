@@ -6,6 +6,7 @@
   },
   "whitelistedNonPeerDependencies": [
     "@types/inflection",
-    "inflection"
+    "inflection",
+    "@types/lodash"
   ]
 }

@@ -12,6 +12,8 @@ import {AngularReduxDataLayerModule} from '../../projects/angular-redux-data/src
 import {CommentEffects} from './redux/effects/comment.effects';
 import {PostEffects} from './redux/effects/post.effects';
 import {environment} from '../environments/environment';
+import {CruxAdapter} from './adapters/crux.adapter';
+import {ClientEffects} from './redux/effects/client.effects';
 
 @NgModule({
     declarations: [
@@ -22,14 +24,24 @@ import {environment} from '../environments/environment';
         StoreModule.forRoot(ReduxDataReducerFactory.getReducers(entities, {uiState: uiState})),
         EffectsModule.forRoot([
             CommentEffects,
-            PostEffects
+            PostEffects,
+            ClientEffects
         ]),
         AngularReduxDataModule.forRoot({
             entityNameSpaces: entities
         }),
         AngularReduxDataLayerModule.forRoot({
             entityNameSpaces: entities,
-            entityAdapterMappings: {},
+            entityAdapterMappings: {
+                'client': {
+                    adapter: CruxAdapter,
+                    host: 'https://development.appointment-plus.com/',
+                    path: 'api/v2.0.18.1/Rest/',
+                    config: {
+                        applicationInterface: 'e0c035f16c4b0cfdbc63972cd7e6edfd',
+                    }
+                }
+            },
             defaultHost: environment.host,
             defaultPath: environment.path
         }),

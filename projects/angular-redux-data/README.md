@@ -5,6 +5,9 @@ utilizes [@ngrx](https://github.com/ngrx/platform) and relative libraries to pro
 and redundant boilerplate code for a standard data schema. The framework also provides a standard DataLayerService to be used
 with HTTP RESTful and Websocket based apis.
 
+**_NOTE_** developers using this library will benefit from having a fundamental understanding of [REDUX and @ngrx](https://ngrx.io/).
+However, this knowledge is not required if the application will only be using ARD as a standardized data layer solution.
+
 ## Project Status
 
 ~~Initialized~~ -> **Under Construction** -> Alpha -> Beta -> Production
@@ -91,17 +94,53 @@ AngularReduxDataLayerModule.forRoot({
 ```
 
 ######entity effects
+ 
 
-_Note: This implementation will likely change in a near future version to further reduce the redux boilerplate_
+In order retrieve data from your api endpoint(s) you will need to setup a  [@ngrx/effects](https://ngrx.io/guide/effects) service for
+every model in your schema. 
 
-In order to access
+ARD streamlines the data layer interaction for ngrx/effects in Angular application via the `DataLayerService` that is configured in the 
+`app.module` component. 
 
+In each Effects service that you want to utilize the data layer adaptor follow these steps:
+
+1. Implement the `RxDataEffectI` interface to contract the following properties:
+
+    ```typescript
+    @Effect() findAll$;
+    @Effect() findRecord$;
+    @Effect() create$;
+    @Effect() delete$;
+    @Effect() update$;
+    @Effect() queryAll$;
+    ```
+
+2. Inject the following ARD and REDUX services into your services constructor:
+
+    ```typescript
+    Actions // import {Actions, Effect} from '@ngrx/effects';
+    ReduxDataActionsService // import {ReduxDataActionsService, RxDataEffectI} from 'angular-redux-data';
+    DataLayerService // import {DataLayerService} from 'angular-redux-data/lib/data-services/data-layer.service';
+    ```
+
+3. In the constructor assign the RxDataEffectI properties as follows :
+    
+    ```typescript
+    this.findAll$ = this.actionsService.findAllResource$(actions$, _dataLayerService, '<singularization of model namespace>');
+    this.findRecord$ = this.actionsService.findRecordResource$(actions$, _dataLayerService, '<singularization of model namespace>');
+    this.queryAll$ = this.actionsService.queryAllResource$(actions$, _dataLayerService, '<singularization of model namespace>');
+    this.create$ = this.actionsService.createResource$(actions$, _dataLayerService, '<singularization of model namespace>');
+    this.delete$ = this.actionsService.deleteResource$(actions$, _dataLayerService, '<singularization of model namespace>');
+    this.update$ = this.actionsService.updateResource$(actions$, _dataLayerService, '<singularization of model namespace>');
+    ```
+
+* **_Note_**: This implementation will likely change in a future version to further reduce the redux boilerplate. This setup has been left
+manual for now in order to provide flexibility in regards to the side effects needed for each model in the schema.
 
 #####Use
 
 In your component inject the ReduxDataActionsService and ReduxDataSelectorsService and the [@ngrx/store](https://github.com/ngrx/platform) StoreModule 
 ```typescript
-
 constructor(private _actionsService: ReduxDataActionsService,
                 private _entitySelectorsService: ReduxDataSelectorsService,
                 private _store: Store<ApplicationState>) {
@@ -134,14 +173,14 @@ Actions
 
 `this._actionsService.actions[<entity name string>].` :
 
-|       method      | Description  |
-| -------------     |           -----
-|      FindRecord   | 
-|      FindAll      |
-|      QueryAll     | 
-|      Create       | 
-|      Update       | 
-|      Delete       | 
+|       method      | Code Sample   | Description   |
+| -------------     | --------      |    --------   | 
+|      FindRecord   |   | |
+|      FindAll      |   | |
+|      QueryAll     |   | |
+|      Create       |   | |
+|      Update       |   | |
+|      Delete       |   | |
 
 Selections
 
@@ -154,6 +193,9 @@ Selections
 |      selectEntities     | 
 |      selectIds          | 
 |      selectTotal        | 
+
+
+
 
 ---
 ###END BASIC SETUP AND IMPLEMENTATION

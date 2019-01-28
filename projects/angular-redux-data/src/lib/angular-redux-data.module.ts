@@ -4,12 +4,11 @@ import {ReduxDataActionsService} from './redux-data-services/redux-data.actions.
 import {ReduxDataSelectorsService} from './redux-data-services/redux-data.selectors.service';
 import {ReduxDataServiceConfig} from './redux-data-services/redux-data-service-config';
 
-
 @NgModule({
     imports: [CommonModule],
     providers: [
         ReduxDataActionsService,
-        ReduxDataSelectorsService
+        ReduxDataSelectorsService,
     ],
 })
 export class AngularReduxDataModule {
