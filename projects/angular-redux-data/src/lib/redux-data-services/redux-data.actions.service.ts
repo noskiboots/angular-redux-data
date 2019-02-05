@@ -5,10 +5,11 @@ import {Actions, ofType} from '@ngrx/effects';
 import {Action} from '@ngrx/store';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {ReduxDataServiceConfig} from './redux-data-service-config';
-import {Observable, of, throwError} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {DataLayerService} from '../data-services/data-layer.service';
 import {flatMap} from 'rxjs/internal/operators';
 import * as _ from 'lodash';
+import {RequestConfiguration} from '../data-adapters/request-configuration';
 
 export class EntityActions {
     actionStrings: any;
@@ -66,7 +67,7 @@ export class ReduxDataActionsService {
     public findAllResource$(actions$: Actions,
                             dataLayerService: DataLayerService,
                             resourceType,
-                            config?): Observable<Action> {
+                            config?: RequestConfiguration): Observable<Action> {
         return actions$
             .pipe(
                 ofType(this.actions[resourceType].actionStrings.FIND_ALL),
@@ -102,13 +103,16 @@ export class ReduxDataActionsService {
             );
     }
 
-    public findRecordResource$(actions$: Actions, dataLayerService: DataLayerService, resourceType: string): Observable<Action> {
+    public findRecordResource$(actions$: Actions,
+                               dataLayerService: DataLayerService,
+                               resourceType: string,
+                               config?: RequestConfiguration): Observable<Action> {
         return actions$
             .pipe(
                 ofType(this.actions[resourceType].actionStrings.FIND_RECORD),
                 switchMap((action) => {
                     return dataLayerService.adapters[resourceType]
-                        .findRecord(action['resource'], +action['id'])
+                        .findRecord(action['resource'], +action['id'], config)
                         .pipe(
                             flatMap((data$: {}) => {
                                 return [
@@ -138,13 +142,19 @@ export class ReduxDataActionsService {
             );
     }
 
-    public queryAllResource$(actions$: Actions, dataLayerService: DataLayerService, resourceType: string): Observable<Action> {
+    public queryAllResource$(actions$: Actions,
+                             dataLayerService: DataLayerService,
+                             resourceType: string,
+                             config?: RequestConfiguration): Observable<Action> {
         return actions$
             .pipe(
                 ofType(this.actions[resourceType].actionStrings.QUERY_ALL),
                 switchMap((action) => {
+                    const requestConfiguration = !!config ? config : new RequestConfiguration();
+                    requestConfiguration.parameters = action['params'];
                     return dataLayerService.adapters[resourceType]
-                        .queryAll(action['resource'], {parameters: action['params']})
+                        .queryAll(action['resource'],
+                            requestConfiguration)
                         .pipe(
                             flatMap((data$: any[]) => {
                                 return [
@@ -175,13 +185,19 @@ export class ReduxDataActionsService {
             );
     }
 
-    public updateResource$(actions$: Actions, dataLayerService: DataLayerService, resourceType: string): Observable<Action> {
+    public updateResource$(actions$: Actions,
+                           dataLayerService: DataLayerService,
+                           resourceType: string,
+                           config?: RequestConfiguration): Observable<Action> {
         return actions$
             .pipe(
                 ofType(this.actions[resourceType].actionStrings.UPDATE),
                 switchMap((action) => {
                     return dataLayerService.adapters[resourceType]
-                        .updateRecord(action['resource'], +action['id'], action['changes'])
+                        .updateRecord(action['resource'],
+                            +action['id'],
+                            action['changes'],
+                            config)
                         .pipe(
                             flatMap((data$: any[]) => {
                                 return [
@@ -212,13 +228,18 @@ export class ReduxDataActionsService {
             );
     }
 
-    public createResource$(actions$: Actions, dataLayerService: DataLayerService, resourceType: string): Observable<Action> {
+    public createResource$(actions$: Actions,
+                           dataLayerService: DataLayerService,
+                           resourceType: string,
+                           config?: RequestConfiguration): Observable<Action> {
         return actions$
             .pipe(
                 ofType(this.actions[resourceType].actionStrings.CREATE),
                 switchMap((action) => {
                     return dataLayerService.adapters[resourceType]
-                        .createRecord(action['resource'], action['data'])
+                        .createRecord(action['resource'],
+                            action['data'],
+                            config)
                         .pipe(
                             flatMap((data$: any[]) => {
                                 return [
@@ -249,13 +270,18 @@ export class ReduxDataActionsService {
             );
     }
 
-    public deleteResource$(actions$: Actions, dataLayerService: DataLayerService, resourceType: string): Observable<Action> {
+    public deleteResource$(actions$: Actions,
+                           dataLayerService: DataLayerService,
+                           resourceType: string,
+                           config?: RequestConfiguration): Observable<Action> {
         return actions$
             .pipe(
                 ofType(this.actions[resourceType].actionStrings.DELETE),
                 switchMap((action) => {
                     return dataLayerService.adapters[resourceType]
-                        .deleteRecord(action['resource'], action['id'])
+                        .deleteRecord(action['resource'],
+                            action['id'],
+                            config)
                         .pipe(
                             map(data$ => {
                                 return new this.actions[resourceType].DeleteSuccess(resourceType, {id: action['id']});
