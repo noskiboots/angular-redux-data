@@ -5,9 +5,14 @@
     "entryFile": "src/public_api.ts"
   },
   "whitelistedNonPeerDependencies": [
+    "@ngrx/effects",
+    "@ngrx/entity",
+    "@ngrx/router-store",
+    "@ngrx/store",
+    "@ngrx/store-devtools",
     "@types/inflection",
-    "inflection",
     "@types/lodash",
-    "@types/uuid"
+    "@types/uuid",
+    "inflection"
   ]
 }
