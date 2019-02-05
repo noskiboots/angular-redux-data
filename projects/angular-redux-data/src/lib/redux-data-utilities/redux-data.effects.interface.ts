@@ -7,4 +7,5 @@ export interface RxDataEffectI {
     create$: EffectMetadata<any>;
     delete$: EffectMetadata<any>;
     update$: EffectMetadata<any>;
+    entityNamespace: string;
 }

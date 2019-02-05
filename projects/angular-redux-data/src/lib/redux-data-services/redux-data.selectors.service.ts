@@ -6,11 +6,15 @@ import {createEntityAdapter} from '@ngrx/entity';
 
 export class EntitySelector {
     getEntityById: any;
+    getEntitiesByIds: any;
+    getEntitiesByParameters: any;
     getEntities: any;
     getAllEntities: any;
     getTotal: any;
     getIds: any;
     selectById: any;
+    selectByIds: any;
+    selectByParameters: any;
     selectEntities: any;
     selectIds: any;
     selectAll: any;
@@ -49,14 +53,34 @@ export class ReduxDataSelectorsService {
                     if (state) {
                         return state.entities[id];
                     }
-                    return undefined;
+                };
+            entitySelector.getEntitiesByIds = (ids: string[]) =>
+                state => {
+                    if (state) {
+                        const entities = _.values(state.entities);
+                        return entities.filter(entity => ids.indexOf(entity.id) > -1);
+                    }
+                };
+            entitySelector.getEntitiesByParameters = (params: {}) =>
+                state => {
+                    if (state) {
+                        let filteredEntities = _.values(state.entities);
+                        Object.keys(params).forEach(key => {
+                            filteredEntities = filteredEntities.filter(entity => {
+                                if (entity[key]) {
+                                    return entity[key] === params[key];
+                                }
+                                return false;
+                            });
+                        });
+                        return filteredEntities;
+                    }
                 };
             entitySelector.getAllEntities = () =>
                 state => {
                     if (state) {
                         return _.values(state.entities);
                     }
-                    return undefined;
                 };
             entitySelector.getEntities = () =>
                 state => {
@@ -78,10 +102,14 @@ export class ReduxDataSelectorsService {
                 };
             entitySelector.selectById = (id: string | number) =>
                 createSelector(createFeatureSelector(nameSpace), this._selectors[nameSpace].getEntityById(id));
+            entitySelector.selectByIds = (ids: string[]) =>
+                createSelector(createFeatureSelector(nameSpace), this._selectors[nameSpace].getEntitiesByIds(ids));
+            entitySelector.selectByParameters = (params: any) =>
+                createSelector(createFeatureSelector(nameSpace), this._selectors[nameSpace].getEntitiesByParameters(params));
             entitySelector.selectAll = () => createSelector(createFeatureSelector(nameSpace), this._selectors[nameSpace].getAllEntities());
-            entitySelector.selectEntities = () =>  createSelector(createFeatureSelector(nameSpace), this._selectors[nameSpace].getEntities());
+            entitySelector.selectEntities = () => createSelector(createFeatureSelector(nameSpace), this._selectors[nameSpace].getEntities());
             entitySelector.selectIds = () => createSelector(createFeatureSelector(nameSpace), this._selectors[nameSpace].getIds());
-            entitySelector.selectTotal = () =>  createSelector(createFeatureSelector(nameSpace), this._selectors[nameSpace].getTotal());
+            entitySelector.selectTotal = () => createSelector(createFeatureSelector(nameSpace), this._selectors[nameSpace].getTotal());
         });
     }
 

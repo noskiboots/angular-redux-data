@@ -1,6 +1,7 @@
-import {ActionReducerMap, createFeatureSelector, MemoizedSelector} from '@ngrx/store';
+import {ActionReducerMap} from '@ngrx/store';
 import {createEntityAdapter} from '@ngrx/entity';
 import {getEntityActionStrings} from '../redux-data-utilities/redux-data.actions.strings';
+import {ardTransaction} from '../redux-data-transactions/ard-transaction.reducer';
 
 export class EntityReducer {
     actionStrings;
@@ -22,12 +23,18 @@ export class EntityReducer {
 
     private _reducer(state = this.initialState, action) {
         switch (action.type) {
-            case this.actionStrings.ADD_ALL:
+            case this.actionStrings.FIND_ALL_SUCCESS:
                 return this.adapter.addAll(action.data, state);
-            case this.actionStrings.ADD_ONE:
+            case this.actionStrings.QUERY_ALL_SUCCESS:
+                return this.adapter.addAll(action.data, state);
+            case this.actionStrings.FIND_RECORD_SUCCESS:
                 return this.adapter.addOne(action.data, state);
             case this.actionStrings.UPDATE_SUCCESS:
                 return this.adapter.updateOne({id: action.data.id, changes: action.data}, state);
+            case this.actionStrings.CREATE_SUCCESS:
+                return this.adapter.addOne(action.data, state);
+            case this.actionStrings.DELETE_SUCCESS:
+                return this.adapter.removeOne(action.data.id, state);
             case this.actionStrings.SUCCESS:
                 return this.adapter.addOne(action.resource, state);
             default:
@@ -43,11 +50,14 @@ export class ReduxDataReducerFactory {
             const newInstance = new EntityReducer(getEntityActionStrings(nameSpace), nameSpace);
             dynamicEntityReducers[nameSpace] = newInstance.reducer;
         });
+
         if (customReducers) {
             Object.keys(customReducers).forEach(key => {
                 dynamicEntityReducers[key] = customReducers[key];
             });
         }
+        const transactionInstance = new EntityReducer(getEntityActionStrings('ardTransaction'), 'ardTransaction');
+        dynamicEntityReducers['ardTransaction'] = transactionInstance.reducer;
         return dynamicEntityReducers;
     }
 }

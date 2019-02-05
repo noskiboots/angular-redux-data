@@ -6,8 +6,24 @@ import {EntityActions} from '../redux-data-services/redux-data.actions.service';
 export class FindAll implements Action {
     readonly type;
 
-    constructor(public resource: string, public config?: any) {
+    constructor(public resource: string, public transactionId?: string) {
         this.type = getEntityActionStrings(resource).FIND_ALL;
+    }
+}
+
+export class FindAllFailed implements Action {
+    readonly type;
+
+    constructor(public resource: string, public data: any, error: any) {
+        this.type = getEntityActionStrings(resource).FIND_ALL_FAILED;
+    }
+}
+
+export class FindAllSuccess implements Action {
+    readonly type;
+
+    constructor(public resource: string, public data: any[]) {
+        this.type = getEntityActionStrings(resource).FIND_ALL_SUCCESS;
     }
 }
 
@@ -15,8 +31,25 @@ export class FindRecord implements Action {
     readonly type;
 
     constructor(public resource: string,
-                public id: string | number) {
+                public id: string | number,
+                public transactionId?: string) {
         this.type = getEntityActionStrings(resource).FIND_RECORD;
+    }
+}
+
+export class FindRecordFailed implements Action {
+    readonly type;
+
+    constructor(public resource: string, public data: any) {
+        this.type = getEntityActionStrings(resource).FIND_RECORD_FAILED;
+    }
+}
+
+export class FindRecordSuccess implements Action {
+    readonly type;
+
+    constructor(public resource: string, public data: any) {
+        this.type = getEntityActionStrings(resource).FIND_RECORD_SUCCESS;
     }
 }
 
@@ -24,9 +57,26 @@ export class QueryAll implements Action {
     readonly type;
 
     constructor(public resource: string,
-                public params: any) {
+                public params: any,
+                public transactionId?: string) {
         this.type = getEntityActionStrings(resource).QUERY_ALL;
 
+    }
+}
+
+export class QueryAllFailed implements Action {
+    readonly type;
+
+    constructor(public resource: string, public data: any) {
+        this.type = getEntityActionStrings(resource).QUERY_ALL_FAILED;
+    }
+}
+
+export class QueryAllSuccess implements Action {
+    readonly type;
+
+    constructor(public resource: string, public data: any[]) {
+        this.type = getEntityActionStrings(resource).QUERY_ALL_SUCCESS;
     }
 }
 
@@ -34,9 +84,28 @@ export class Create implements Action {
     readonly type;
 
     constructor(public resource: string,
-                public data: any) {
+                public data: any,
+                public transactionId?: string) {
         this.type = getEntityActionStrings(resource).CREATE;
 
+    }
+}
+
+export class CreateSuccess implements Action {
+    readonly type;
+
+    constructor(public resource: string,
+                public data: any) {
+        this.type = getEntityActionStrings(resource).CREATE_SUCCESS;
+    }
+}
+
+export class CreateFailed implements Action {
+    readonly type;
+
+    constructor(public resource: string,
+                public data: any) {
+        this.type = getEntityActionStrings(resource).CREATE_FAIL;
     }
 }
 
@@ -45,38 +114,9 @@ export class Update implements Action {
 
     constructor(public resource: string,
                 public id: string | number,
-                public changes: Partial<any>) {
+                public changes: Partial<any>,
+                public transactionId?: string) {
         this.type = getEntityActionStrings(resource).UPDATE;
-
-    }
-}
-
-export class Delete implements Action {
-    readonly type;
-
-    constructor(public resource: string,
-                public id: string | number) {
-        this.type = getEntityActionStrings(resource).DELETE;
-
-    }
-}
-
-export class AddAll implements Action {
-    readonly type;
-
-    constructor(public resource: string,
-                public data: any[]) {
-        this.type = getEntityActionStrings(resource).ADD_ALL;
-
-    }
-}
-
-export class AddOne implements Action {
-    readonly type;
-
-    constructor(public resource: string,
-                public data: any) {
-        this.type = getEntityActionStrings(resource).ADD_ONE;
 
     }
 }
@@ -91,7 +131,7 @@ export class UpdateSuccess implements Action {
     }
 }
 
-export class UpdateFail implements Action {
+export class UpdateFailed implements Action {
     readonly type;
 
     constructor(public resource: string,
@@ -100,21 +140,14 @@ export class UpdateFail implements Action {
     }
 }
 
-export class CreateSuccess implements Action {
+export class Delete implements Action {
     readonly type;
 
     constructor(public resource: string,
-                public data: any) {
-        this.type = getEntityActionStrings(resource).CREATE_SUCCESS;
-    }
-}
+                public id: string | number,
+                public transactionId?: string) {
+        this.type = getEntityActionStrings(resource).DELETE;
 
-export class CreateFail implements Action {
-    readonly type;
-
-    constructor(public resource: string,
-                public data: any) {
-        this.type = getEntityActionStrings(resource).CREATE_FAIL;
     }
 }
 
@@ -127,7 +160,7 @@ export class DeleteSuccess implements Action {
     }
 }
 
-export class DeleteFail implements Action {
+export class DeleteFailed implements Action {
     readonly type;
 
     constructor(public resource: string,
@@ -136,7 +169,29 @@ export class DeleteFail implements Action {
     }
 }
 
+// @TODO remove upon finalization
+export class AddAll implements Action {
+    readonly type;
 
+    constructor(public resource: string,
+                public data: any[]) {
+        this.type = getEntityActionStrings(resource).ADD_ALL;
+
+    }
+}
+
+// @TODO remove upon finalization
+export class AddOne implements Action {
+    readonly type;
+
+    constructor(public resource: string,
+                public data: any) {
+        this.type = getEntityActionStrings(resource).ADD_ONE;
+
+    }
+}
+
+// @TODO remove upon finalization
 export class Success implements Action {
     readonly type;
 
@@ -146,6 +201,7 @@ export class Success implements Action {
     }
 }
 
+// @TODO remove upon finalization
 export class Error implements Action {
     readonly type;
 
@@ -157,9 +213,29 @@ export class Error implements Action {
 
 export type ReduxDataActions = Create
     | Update
+    | UpdateSuccess
+    | UpdateFailed
+
     | Delete
+    | DeleteSuccess
+    | DeleteFailed
+
+    | Create
+    | CreateSuccess
+    | CreateFailed
+
     | FindAll
+    | FindAllSuccess
+    | FindAllFailed
+
+    | QueryAll
+    | QueryAllFailed
+    | QueryAllSuccess
+
     | FindRecord
+    | FindRecordSuccess
+    | FindRecordFailed
+
     | AddAll
     | AddOne
     | Success

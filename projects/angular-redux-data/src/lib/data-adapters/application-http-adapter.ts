@@ -5,7 +5,6 @@ import {Store} from '@ngrx/store';
 import {catchError, filter, map} from 'rxjs/operators';
 import {RequestConfiguration} from './request-configuration';
 import {HttpAction} from './http-action';
-import * as inflection from 'inflection';
 
 export class ApplicationHttpAdapter extends DataAdapter {
 
@@ -20,37 +19,39 @@ export class ApplicationHttpAdapter extends DataAdapter {
     findAll(type: string, config?: RequestConfiguration): Observable<any> {
         return this.generateRequest(HttpAction.get, type, config).pipe(map(response => {
             return response;
-        }));
+        }), catchError((err) => throwError(err)));
+
     }
 
     findRecord(type: string, recordId: number | string, config?: RequestConfiguration): Observable<any> {
         return this.generateRequest(HttpAction.get, type, config, null, recordId).pipe(map(response => {
             return response;
-        }));
+        }), catchError((err) => throwError(err)));
+
     }
 
     queryAll(type: string, config?: RequestConfiguration): Observable<any> {
         return this.generateRequest(HttpAction.get, type, config).pipe(map(response => {
             return response;
-        }));
+        }), catchError((err) => throwError(err)));
     }
 
     createRecord(type: string, data: any, config?: RequestConfiguration): Observable<any> {
-        return this.generateRequest(HttpAction.post, type, config).pipe(map(response => {
+        return this.generateRequest(HttpAction.post, type, config, data).pipe(map(response => {
             return response;
-        }));
+        }), catchError((err) => throwError(err)));
     }
 
     updateRecord(type: string, recordId: number | string, data, config?: RequestConfiguration): Observable<any> {
-        return this.generateRequest(HttpAction.patch, type, config).pipe(map(response => {
+        return this.generateRequest(HttpAction.patch, type, config, data, recordId).pipe(map(response => {
             return response;
-        }));
+        }), catchError((err) => throwError(err)));
     }
 
     deleteRecord(type: string, recordId: number | string, config?: RequestConfiguration): Observable<any> {
         return this.generateRequest(HttpAction.delete, type, config, null, recordId).pipe(map(response => {
             return response;
-        }));
+        }), catchError((err) => throwError(err)));
     }
 
     private generateRequest(action: HttpAction,
@@ -58,7 +59,7 @@ export class ApplicationHttpAdapter extends DataAdapter {
                             config: RequestConfiguration,
                             data?: any,
                             id?: number | string): Observable<any> {
-        const url = `${this._host}${this._path ? `/${this._path}` : ''}/${inflection.pluralize(type).toLowerCase()}`;
+        const url = `${this._host}${this._path ? `/${this._path}` : ''}/${type}`;
         const headers = config && config.headers ? config.headers : new HttpHeaders().set('Content-Type', 'json/application');
         const options = {headers, params: config ? config.parameters : {}};
         switch (action) {
@@ -69,7 +70,7 @@ export class ApplicationHttpAdapter extends DataAdapter {
                 return this._postRequest(url, options, data);
                 break;
             case HttpAction.patch:
-                return this._patchRequest(url, options, data);
+                return this._patchRequest(url, options, id, data);
                 break;
             case HttpAction.delete:
                 return this._deleteRequest(url, options, id);
@@ -90,7 +91,6 @@ export class ApplicationHttpAdapter extends DataAdapter {
                 }
             }),
             catchError(err => {
-                console.log(`Request Error: ${err}`);
                 return throwError(err);
             })
         );
@@ -100,28 +100,26 @@ export class ApplicationHttpAdapter extends DataAdapter {
         return this._http.post(url, data, options).pipe(
             map(response => response),
             catchError(err => {
-                console.log(`Request Error: ${err}`);
                 return throwError(err);
             })
         );
     }
 
-    private _patchRequest(url: string, options: any, data: any): Observable<any> {
-        return this._http.post(url, data, options).pipe(
+    private _patchRequest(url: string, options: any, id: string | number, data: any): Observable<any> {
+        url = `${url}${id ? `/${id}` : ''}`;
+        return this._http.patch(url, data, options).pipe(
             map(response => response),
             catchError(err => {
-                console.log(`Request Error: ${err}`);
                 return throwError(err);
             })
         );
     }
 
     private _deleteRequest(url: string, options: any, id: number | string): Observable<any> {
-        url = `${url}/${id}`;
-        return this._http.get(url, options).pipe(
+        url = `${url}${id ? `/${id}` : ''}`;
+        return this._http.delete(url, options).pipe(
             map(response => response),
             catchError(err => {
-                console.log(`Request Error: ${err}`);
                 return throwError(err);
             })
         );

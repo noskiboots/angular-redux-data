@@ -3,10 +3,12 @@ import * as entityActions from '../redux-data-utilities/redux-data.actions';
 import {getEntityActionStrings} from '../redux-data-utilities/redux-data.actions.strings';
 import {Actions, ofType} from '@ngrx/effects';
 import {Action} from '@ngrx/store';
-import {map, switchMap} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import {ReduxDataServiceConfig} from './redux-data-service-config';
-import {Observable} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {DataLayerService} from '../data-services/data-layer.service';
+import {flatMap} from 'rxjs/internal/operators';
+import * as _ from 'lodash';
 
 export class EntityActions {
     actionStrings: any;
@@ -26,6 +28,7 @@ export class ReduxDataActionsService {
     constructor(@Optional() entityConfig: ReduxDataServiceConfig) {
         if (entityConfig) {
             this._entityNameSpaces = entityConfig.entityNameSpaces;
+            this._entityNameSpaces.push('ardTransaction');
             this.actionsFactory();
         }
     }
@@ -68,10 +71,33 @@ export class ReduxDataActionsService {
             .pipe(
                 ofType(this.actions[resourceType].actionStrings.FIND_ALL),
                 switchMap((action) => {
-                    return dataLayerService.adapters[resourceType].findAll(action['resource'], config);
-                }),
-                map(data$ => {
-                    return new this.actions[resourceType].AddAll(resourceType, data$);
+                    return dataLayerService.adapters[resourceType]
+                        .findAll(action['resource'], config)
+                        .pipe(
+                            flatMap((data$: any[]) => {
+                                return [
+                                    new this.actions[resourceType].FindAllSuccess(resourceType, data$),
+                                    new this.actions['ardTransaction'].UpdateSuccess('ardTransaction', {
+                                        id: action['transactionId'],
+                                        success: true,
+                                        entities: _.map(data$, 'id'),
+                                    })
+                                ];
+                            }),
+                            catchError(error => {
+                                return of(error).pipe(
+                                    flatMap(() => {
+                                        return [new this.actions[resourceType].FindAllFailed(resourceType, action),
+                                            new this.actions['ardTransaction'].UpdateSuccess('ardTransaction', {
+                                                id: action['transactionId'],
+                                                failed: true,
+                                                error: error,
+                                                updatedAt: Date.now()
+                                            })];
+                                    })
+                                );
+                            })
+                        );
                 })
             );
     }
@@ -81,11 +107,34 @@ export class ReduxDataActionsService {
             .pipe(
                 ofType(this.actions[resourceType].actionStrings.FIND_RECORD),
                 switchMap((action) => {
-                    return dataLayerService.adapters[resourceType].findRecord(action['resource'], +action['id']);
+                    return dataLayerService.adapters[resourceType]
+                        .findRecord(action['resource'], +action['id'])
+                        .pipe(
+                            flatMap((data$: {}) => {
+                                return [
+                                    new this.actions[resourceType].FindRecordSuccess(resourceType, data$),
+                                    new this.actions['ardTransaction'].UpdateSuccess('ardTransaction', {
+                                        id: action['transactionId'],
+                                        success: true,
+                                        entities: [data$['id']]
+                                    })
+                                ];
+                            }),
+                            catchError(error => {
+                                return of(error).pipe(
+                                    flatMap(() => {
+                                        return [new this.actions[resourceType].FindRecordFailed(resourceType, action),
+                                            new this.actions['ardTransaction'].UpdateSuccess('ardTransaction', {
+                                                id: action['transactionId'],
+                                                failed: true,
+                                                error: error,
+                                                updatedAt: Date.now()
+                                            })];
+                                    })
+                                );
+                            })
+                        );
                 }),
-                map(data$ => {
-                    return new this.actions[resourceType].AddOne(resourceType, data$);
-                })
             );
     }
 
@@ -94,11 +143,35 @@ export class ReduxDataActionsService {
             .pipe(
                 ofType(this.actions[resourceType].actionStrings.QUERY_ALL),
                 switchMap((action) => {
-                    return dataLayerService.adapters[resourceType].queryAll(action['resource'], {parameters: action['params']});
+                    return dataLayerService.adapters[resourceType]
+                        .queryAll(action['resource'], {parameters: action['params']})
+                        .pipe(
+                            flatMap((data$: any[]) => {
+                                return [
+                                    new this.actions[resourceType].QueryAllSuccess(resourceType, data$),
+                                    new this.actions['ardTransaction'].UpdateSuccess('ardTransaction', {
+                                        id: action['transactionId'],
+                                        success: true,
+                                        entities: _.map(data$, 'id'),
+                                        updatedAt: Date.now()
+                                    })
+                                ];
+                            }),
+                            catchError(error => {
+                                return of(error).pipe(
+                                    flatMap(() => {
+                                        return [new this.actions[resourceType].QueryAllFailed(resourceType, action),
+                                            new this.actions['ardTransaction'].UpdateSuccess('ardTransaction', {
+                                                id: action['transactionId'],
+                                                failed: true,
+                                                error: error,
+                                                updatedAt: Date.now()
+                                            })];
+                                    })
+                                );
+                            })
+                        );
                 }),
-                map(data$ => {
-                    return new this.actions[resourceType].AddAll(resourceType, data$);
-                })
             );
     }
 
@@ -107,11 +180,35 @@ export class ReduxDataActionsService {
             .pipe(
                 ofType(this.actions[resourceType].actionStrings.UPDATE),
                 switchMap((action) => {
-                    return dataLayerService.adapters[resourceType].updateRecord(action['resource'], +action['id'], action['changes']);
+                    return dataLayerService.adapters[resourceType]
+                        .updateRecord(action['resource'], +action['id'], action['changes'])
+                        .pipe(
+                            flatMap((data$: any[]) => {
+                                return [
+                                    new this.actions[resourceType].UpdateSuccess(resourceType, data$),
+                                    new this.actions['ardTransaction'].UpdateSuccess('ardTransaction', {
+                                        id: action['transactionId'],
+                                        success: true,
+                                        entities: [data$['id']],
+                                        updatedAt: Date.now()
+                                    })
+                                ];
+                            }),
+                            catchError(error => {
+                                return of(error).pipe(
+                                    flatMap(() => {
+                                        return [new this.actions[resourceType].UpdateFailed(resourceType, action),
+                                            new this.actions['ardTransaction'].UpdateSuccess('ardTransaction', {
+                                                id: action['transactionId'],
+                                                failed: true,
+                                                error: error,
+                                                updatedAt: Date.now()
+                                            })];
+                                    })
+                                );
+                            })
+                        );
                 }),
-                map(data$ => {
-                    return new this.actions[resourceType].UpdateSuccess(resourceType, data$);
-                })
             );
     }
 
@@ -120,11 +217,35 @@ export class ReduxDataActionsService {
             .pipe(
                 ofType(this.actions[resourceType].actionStrings.CREATE),
                 switchMap((action) => {
-                    return dataLayerService.adapters[resourceType].createRecord(action['resource'], action['data']);
+                    return dataLayerService.adapters[resourceType]
+                        .createRecord(action['resource'], action['data'])
+                        .pipe(
+                            flatMap((data$: any[]) => {
+                                return [
+                                    new this.actions[resourceType].CreateSuccess(resourceType, data$),
+                                    new this.actions['ardTransaction'].UpdateSuccess('ardTransaction', {
+                                        id: action['transactionId'],
+                                        success: true,
+                                        entities: [data$['id']],
+                                        updatedAt: Date.now()
+                                    })
+                                ];
+                            }),
+                            catchError(error => {
+                                return of(error).pipe(
+                                    flatMap(() => {
+                                        return [new this.actions[resourceType].CreateFailed(resourceType, action),
+                                            new this.actions['ardTransaction'].UpdateSuccess('ardTransaction', {
+                                                id: action['transactionId'],
+                                                failed: true,
+                                                error: error,
+                                                updatedAt: Date.now()
+                                            })];
+                                    })
+                                );
+                            })
+                        );
                 }),
-                map(data$ => {
-                    return new this.actions[resourceType].Success();
-                })
             );
     }
 
@@ -133,11 +254,27 @@ export class ReduxDataActionsService {
             .pipe(
                 ofType(this.actions[resourceType].actionStrings.DELETE),
                 switchMap((action) => {
-                    return dataLayerService.adapters[resourceType].deleteRecord(action['resource'], action['id']);
+                    return dataLayerService.adapters[resourceType]
+                        .deleteRecord(action['resource'], action['id'])
+                        .pipe(
+                            map(data$ => {
+                                return new this.actions[resourceType].DeleteSuccess(resourceType, {id: action['id']});
+                            }),
+                            catchError(error => {
+                                return of(error).pipe(
+                                    flatMap(() => {
+                                        return [new this.actions[resourceType].DeleteFailed(resourceType, action),
+                                            new this.actions['ardTransaction'].UpdateSuccess('ardTransaction', {
+                                                id: action['transactionId'],
+                                                failed: true,
+                                                error: error,
+                                                updatedAt: Date.now()
+                                            })];
+                                    })
+                                );
+                            })
+                        );
                 }),
-                map(data$ => {
-                    return new this.actions[resourceType].Success();
-                })
             );
     }
 
