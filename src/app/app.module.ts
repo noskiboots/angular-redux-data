@@ -20,7 +20,7 @@ import {AngularReduxDataLayerModule} from '../../projects/angular-redux-data/src
             entityNameSpaces: environment.reduxDataServiceConfig.entityNameSpaces,
             entityAdapterMappings: environment.reduxDataServiceConfig.entityAdapterMappings,
             defaultHost: environment.reduxDataServiceConfig.defaultHost,
-            defaultPath: environment.reduxDataServiceConfig.defaultPath
+            defaultPath: environment.reduxDataServiceConfig.defaultPath,
         }),
         StoreModule.forRoot(ReduxDataReducerFactory.getReducers(
             environment.reduxDataServiceConfig.entityNameSpaces,
