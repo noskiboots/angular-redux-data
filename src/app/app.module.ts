@@ -1,19 +1,13 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {StoreDevtoolsModule, StoreDevtoolsOptions} from '@ngrx/store-devtools';
 import {AppComponent} from './app.component';
+import {AngularReduxDataModule} from '../../projects/angular-redux-data/src/lib/angular-redux-data.module';
+import {environment} from '../environments/environment';
+import {StoreDevtoolsModule, StoreDevtoolsOptions} from '@ngrx/store-devtools';
 import {StoreModule} from '@ngrx/store';
 import {ReduxDataReducerFactory} from '../../projects/angular-redux-data/src/lib/redux-data-factories/redux-data-reducer.factory';
-import {entities} from './rx-data.config';
-import {uiState} from './redux/features/uiState/uiStateReducer';
-import {AngularReduxDataModule} from '../../projects/angular-redux-data/src/lib/angular-redux-data.module';
 import {EffectsModule} from '@ngrx/effects';
 import {AngularReduxDataLayerModule} from '../../projects/angular-redux-data/src/lib/angular-redux-data-layer.module';
-import {CommentEffects} from './redux/effects/comment.effects';
-import {PostEffects} from './redux/effects/post.effects';
-import {environment} from '../environments/environment';
-import {CruxAdapter} from './adapters/crux.adapter';
-import {ClientEffects} from './redux/effects/client.effects';
 
 @NgModule({
     declarations: [
@@ -21,32 +15,19 @@ import {ClientEffects} from './redux/effects/client.effects';
     ],
     imports: [
         BrowserModule,
-        StoreModule.forRoot(ReduxDataReducerFactory.getReducers(entities, {uiState: uiState})),
-        EffectsModule.forRoot([
-            CommentEffects,
-            PostEffects,
-            ClientEffects
-        ]),
-        AngularReduxDataModule.forRoot({
-            entityNameSpaces: entities
-        }),
+        AngularReduxDataModule.forRoot(environment.reduxDataServiceConfig),
         AngularReduxDataLayerModule.forRoot({
-            entityNameSpaces: entities,
-            entityAdapterMappings: {
-                'client': {
-                    adapter: CruxAdapter,
-                    host: 'https://development.appointment-plus.com/',
-                    path: 'api/v2.0.18.1/Rest/',
-                    config: {
-                        applicationInterface: 'e0c035f16c4b0cfdbc63972cd7e6edfd',
-                    }
-                }
-            },
-            defaultHost: environment.host,
-            defaultPath: environment.path
+            entityNameSpaces: environment.reduxDataServiceConfig.entityNameSpaces,
+            entityAdapterMappings: environment.reduxDataServiceConfig.entityAdapterMappings,
+            defaultHost: environment.reduxDataServiceConfig.defaultHost,
+            defaultPath: environment.reduxDataServiceConfig.defaultPath
         }),
+        StoreModule.forRoot(ReduxDataReducerFactory.getReducers(
+            environment.reduxDataServiceConfig.entityNameSpaces,
+            environment.reduxDataServiceConfig.customReducers)
+        ),
+        EffectsModule.forRoot(environment.reduxDataServiceConfig.effects),
         StoreDevtoolsModule.instrument(<StoreDevtoolsOptions>{maxAge: 25}),
-
     ],
     providers: [],
     bootstrap: [AppComponent]

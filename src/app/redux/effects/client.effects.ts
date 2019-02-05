@@ -12,14 +12,15 @@ export class ClientEffects implements RxDataEffectI {
     @Effect() delete$;
     @Effect() update$;
     @Effect() queryAll$;
+    entityNamespace = 'clients';
 
     constructor(private actions$: Actions, private actionsService: ReduxDataActionsService,
                 private _dataLayerService: DataLayerService) {
-        this.findAll$ = this.actionsService.findAllResource$(actions$, _dataLayerService, 'client');
-        this.findRecord$ = this.actionsService.findRecordResource$(actions$, _dataLayerService, 'client');
-        this.queryAll$ = this.actionsService.queryAllResource$(actions$, _dataLayerService, 'client');
-        this.create$ = this.actionsService.createResource$(actions$, _dataLayerService, 'client');
-        this.delete$ = this.actionsService.deleteResource$(actions$, _dataLayerService, 'client');
-        this.update$ = this.actionsService.updateResource$(actions$, _dataLayerService, 'client');
+        this.findAll$ = this.actionsService.findAllResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.findRecord$ = this.actionsService.findRecordResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.queryAll$ = this.actionsService.queryAllResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.create$ = this.actionsService.createResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.delete$ = this.actionsService.deleteResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.update$ = this.actionsService.updateResource$(actions$, _dataLayerService, this.entityNamespace);
     }
 }

@@ -12,14 +12,15 @@ export class PostEffects implements RxDataEffectI {
     @Effect() delete$;
     @Effect() update$;
     @Effect() queryAll$;
+    entityNamespace = 'posts';
 
     constructor(private actions$: Actions, private actionsService: ReduxDataActionsService,
                 private _dataLayerService: DataLayerService) {
-        this.findAll$ = this.actionsService.findAllResource$(actions$, _dataLayerService, 'post');
-        this.findRecord$ = this.actionsService.findRecordResource$(actions$, _dataLayerService, 'post');
-        this.queryAll$ = this.actionsService.queryAllResource$(actions$, _dataLayerService, 'post');
-        this.create$ = this.actionsService.createResource$(actions$, _dataLayerService, 'post');
-        this.delete$ = this.actionsService.deleteResource$(actions$, _dataLayerService, 'post');
-        this.update$ = this.actionsService.updateResource$(actions$, _dataLayerService, 'post');
+        this.findAll$ = this.actionsService.findAllResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.findRecord$ = this.actionsService.findRecordResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.queryAll$ = this.actionsService.queryAllResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.create$ = this.actionsService.createResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.delete$ = this.actionsService.deleteResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.update$ = this.actionsService.updateResource$(actions$, _dataLayerService, this.entityNamespace);
     }
 }

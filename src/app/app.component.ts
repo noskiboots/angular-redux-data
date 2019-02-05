@@ -1,11 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {ApplicationState} from './rx-data.config';
-import {ReduxDataSelectorsService} from '../../projects/angular-redux-data/src/lib/redux-data-services/redux-data.selectors.service';
-import {ReduxDataActionsService} from '../../projects/angular-redux-data/src/lib/redux-data-services/redux-data.actions.service';
-import {select, Store} from '@ngrx/store';
 import {Post} from '../../shared/post';
-import {filter} from 'rxjs/operators';
 import {Client} from '../../shared/client';
+import {AngularReduxDataService} from '../../projects/angular-redux-data/src/lib/redux-data-services/angular-redux-data.service';
+import {take} from 'rxjs/operators';
+import {ArdTransaction} from '../../projects/angular-redux-data/src/lib/redux-data-transactions/ard-transaction';
 
 @Component({
     selector: 'app-root',
@@ -13,36 +11,67 @@ import {Client} from '../../shared/client';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    title = 'angular-redux-data';
     post: Post;
     clients: Client[] = [];
-    constructor(private _actionsService: ReduxDataActionsService,
-                private _entitySelectorsService: ReduxDataSelectorsService,
-                private _store: Store<ApplicationState>) {
+    user: any;
+    newlyCreatedPost;
+    postList = [];
+
+    constructor(private _ard: AngularReduxDataService) {
     }
 
     ngOnInit() {
-        this._store.dispatch(new this._actionsService.actions['client'].FindAll('clients'));
-        this._store.dispatch(new this._actionsService.actions['post'].FindRecord('posts', 1));
-        this._store.pipe(
-            select(this._entitySelectorsService.getSelector('post').selectById(1)),
-            filter(item => !!item))
-            .subscribe(post$ => {
-                this._store.dispatch(new this._actionsService.actions['comment'].QueryAll('comments', {'postId': post$.id}));
-                this._store.pipe(
-                    select(this._entitySelectorsService.getSelector('comment').selectAll()),
-                    filter(items => !!items && items.length > 0))
-                    .subscribe((comments$) => {
-                        post$['comments'] = comments$;
-                        this.post = post$ as Post;
-                    });
+        this._ard.findRecord('posts', 100).subscribe(post$ => {
+            this.post = post$;
+            if (this.post) {
+                this._ard.queryAll('comments', {postId: this.post.id}).subscribe(comments$ => {
+                    this.post['comments'] = comments$;
+                });
+            }
+        }, (ardTransaction: ArdTransaction) => {
+        });
+        this._ard.findRecord('profile', 1).subscribe(user$ => {
+            this.user = user$;
+        });
+        this._ard.peekAll('posts').subscribe(posts$ => this.postList = posts$);
+    }
+
+    findAll() {
+        this._ard.findAll('posts').pipe(take(1)).subscribe();
+    }
+
+    update1() {
+        this._ard.update('posts', this.newlyCreatedPost.id, {meow: 'mix'})
+            .subscribe(updated$ => {
             });
-        this._store.pipe(
-            select(this._entitySelectorsService.getSelector('client').selectAll()),
-            filter(items => !!items))
-            .subscribe(clients$ => {
-                debugger;
-                this.clients = clients$;
-            });
+    }
+
+    create() {
+        this._ard.create('posts', {
+            'title': 'testing post',
+            'author': 'meow'
+        }).subscribe((post$) => {
+            this.newlyCreatedPost = post$;
+        });
+    }
+
+    create2() {
+        this._ard.create('posts', {
+            'title': 'testing post',
+            'author': 'meow'
+        }).subscribe((post$) => {
+        });
+    }
+
+    delete() {
+        if (this.newlyCreatedPost && this.newlyCreatedPost.id) {
+            this._ard.delete('posts', this.newlyCreatedPost.id)
+                .subscribe(stuff => {
+                    console.log(`delete ${stuff}`);
+                    this.newlyCreatedPost = undefined;
+                }, (error: ArdTransaction) => {
+                   console.log(error.error.toString());
+                });
+        }
     }
 }

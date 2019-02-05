@@ -17,3 +17,15 @@
     </ul>
 </div>
 
+    <button (click)="findAll()">Get All Posts</button>
+    <button (click)="create()">Create</button>
+    <button (click)="update1()">Update 1</button>
+    <button (click)="create2()">Create 2</button>
+    <button (click)="delete()">Delete</button>
+
+    <div>
+        <ul>
+            <li *ngFor="let post of postList">{{post.id}}</li>
+        </ul>
+    </div>
+

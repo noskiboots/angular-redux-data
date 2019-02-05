@@ -12,14 +12,15 @@ export class CommentEffects implements RxDataEffectI {
     @Effect() delete$;
     @Effect() update$;
     @Effect() queryAll$;
+    entityNamespace = 'comments';
 
     constructor(private actions$: Actions, private actionsService: ReduxDataActionsService,
                 private _dataLayerService: DataLayerService) {
-        this.findAll$ = this.actionsService.findAllResource$(actions$, _dataLayerService, 'comment');
-        this.findRecord$ = this.actionsService.findRecordResource$(actions$, _dataLayerService, 'comment');
-        this.queryAll$ = this.actionsService.queryAllResource$(actions$, _dataLayerService,'comment');
-        this.create$ = this.actionsService.createResource$(actions$, _dataLayerService, 'comment');
-        this.delete$ = this.actionsService.deleteResource$(actions$, _dataLayerService, 'comment');
-        this.update$ = this.actionsService.updateResource$(actions$, _dataLayerService, 'comment');
+        this.findAll$ = this.actionsService.findAllResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.findRecord$ = this.actionsService.findRecordResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.queryAll$ = this.actionsService.queryAllResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.create$ = this.actionsService.createResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.delete$ = this.actionsService.deleteResource$(actions$, _dataLayerService, this.entityNamespace);
+        this.update$ = this.actionsService.updateResource$(actions$, _dataLayerService, this.entityNamespace);
     }
 }
