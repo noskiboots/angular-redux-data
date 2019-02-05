@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Actions} from '@ngrx/effects';
 import {ReduxDataSelectorsService} from './redux-data.selectors.service';
 import {select, Store} from '@ngrx/store';
-import {ApplicationState} from '../../../../../src/app/rx-data.config';
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, filter, first} from 'rxjs/operators';
 import {v4 as uuid} from 'uuid';
@@ -32,7 +31,7 @@ export class AngularReduxDataService {
     constructor(private actions: Actions,
                 private actionsService: ReduxDataActionsService,
                 private selectorsService: ReduxDataSelectorsService,
-                private store: Store<ApplicationState>) {
+                private store: Store<any>) {
     }
 
     public findAll(entityNamespace): Observable<any> {
