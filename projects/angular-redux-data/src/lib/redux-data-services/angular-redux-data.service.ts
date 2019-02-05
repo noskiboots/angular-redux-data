@@ -9,7 +9,7 @@ import {v4 as uuid} from 'uuid';
 import {ReduxDataActionsService} from './redux-data.actions.service';
 import {flatMap} from 'rxjs/internal/operators';
 
-enum TransactionType {
+export enum TransactionType {
     'findAll' = 'Find All',
     'findRecord' = 'Find Record',
     'queryAll' = 'Query All',
@@ -18,7 +18,7 @@ enum TransactionType {
     'delete' = 'Delete'
 }
 
-enum SelectorType {
+export enum SelectorType {
     'selectAll',
     'selectById',
     'selectByIds',
@@ -96,7 +96,7 @@ export class AngularReduxDataService {
         );
     }
 
-    private streamAfterTransactionCompleted(entityNamespace, transactionId, selectorType: SelectorType, emitOnce = false) {
+    private streamAfterTransactionCompleted(entityNamespace, transactionId, selectorType: SelectorType, emitOnce = false): Observable<any> {
         return this.store.pipe(
             select(this.selectorsService.getSelector('ardTransaction').selectById(transactionId)),
             filter(transaction => transaction && (transaction.success || transaction.failed)),
@@ -116,7 +116,7 @@ export class AngularReduxDataService {
             }));
     }
 
-    private getSelector(entityNamespace, transaction, selectorType) {
+    private getSelector(entityNamespace, transaction, selectorType): Observable<any> {
         let selector;
         switch (selectorType) {
             case SelectorType.selectAll:
@@ -140,7 +140,7 @@ export class AngularReduxDataService {
         return selector;
     }
 
-    private onceAfterTransactionCompleted(entityNamespace, transaction) {
+    private onceAfterTransactionCompleted(entityNamespace, transaction): Observable<any> {
         return this.store.pipe(
             select(this.selectorsService.getSelector(entityNamespace).selectById(transaction.entities[0])),
             first(entity => !!entity));

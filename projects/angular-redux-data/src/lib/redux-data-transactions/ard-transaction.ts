@@ -1,6 +1,14 @@
+import {TransactionType} from '../redux-data-services/angular-redux-data.service';
+
+
 export class ArdTransaction {
-    completed: boolean;
+    id: string;
+    type: TransactionType;
+    entityNamespace: string;
+    createdAt: number;
+    updatedAt: number;
     success: boolean;
-    failure: boolean;
+    failed: boolean;
     error: any;
+    entities: string[] | number[];
 }
