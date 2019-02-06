@@ -21,6 +21,8 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
+        this._ard.findAll('clients').subscribe(clients => {
+        })
         this._ard.findRecord('posts', 100).subscribe(post$ => {
             this.post = post$;
             if (this.post) {

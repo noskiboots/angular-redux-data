@@ -4,11 +4,13 @@ import {ClientEffects} from '../app/redux/effects/client.effects';
 import {CruxAdapter} from '../app/adapters/crux.adapter';
 import {uiState} from '../app/redux/features/uiState/uiStateReducer';
 import {ProfileEffects} from '../app/redux/effects/profile.effects';
+import {AuthenticationEffects} from '../app/redux/effects/uiStateEffects';
 
 export const environment = {
     production: false,
     reduxDataServiceConfig: {
         effects: [
+            AuthenticationEffects,
             CommentEffects,
             PostEffects,
             ClientEffects,
@@ -18,13 +20,14 @@ export const environment = {
             'posts',
             'comments',
             'clients',
-            'profile'
+            'profile',
+            'clients',
         ],
         // defaultHost: 'https://jsonplaceholder.typicode.com',
         defaultHost: 'http://localhost:3000',
         defaultPath: '',
         entityAdapterMappings: {
-            'client': {
+            'clients': {
                 adapter: CruxAdapter,
                 host: 'https://development.appointment-plus.com/',
                 path: 'api/v2.0.18.1/Rest/',

@@ -8,6 +8,9 @@ import {StoreModule} from '@ngrx/store';
 import {ReduxDataReducerFactory} from '../../projects/angular-redux-data/src/lib/redux-data-factories/redux-data-reducer.factory';
 import {EffectsModule} from '@ngrx/effects';
 import {AngularReduxDataLayerModule} from '../../projects/angular-redux-data/src/lib/angular-redux-data-layer.module';
+import {AuthenticationService} from './services/authentication.service';
+import {uiState} from './redux/features/uiState/uiStateReducer';
+import {AuthenticationEffects} from './redux/effects/uiStateEffects';
 
 @NgModule({
     declarations: [
@@ -24,12 +27,12 @@ import {AngularReduxDataLayerModule} from '../../projects/angular-redux-data/src
         }),
         StoreModule.forRoot(ReduxDataReducerFactory.getReducers(
             environment.reduxDataServiceConfig.entityNameSpaces,
-            environment.reduxDataServiceConfig.customReducers)
+            {'uiState': uiState})
         ),
-        EffectsModule.forRoot(environment.reduxDataServiceConfig.effects),
+        EffectsModule.forRoot([...environment.reduxDataServiceConfig.effects, AuthenticationEffects]),
         StoreDevtoolsModule.instrument(<StoreDevtoolsOptions>{maxAge: 25}),
     ],
-    providers: [],
+    providers: [AuthenticationService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

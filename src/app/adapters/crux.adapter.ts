@@ -6,6 +6,8 @@ import {of, throwError} from 'rxjs/index';
 import {Store} from '@ngrx/store';
 import {ApplicationState} from '../rx-data.config';
 import {environment} from '../../environments/environment';
+import {UnauthenticateUserAction} from '../redux/features/uiState/uiStateActions';
+import {ReduxDataActionsService} from '../../../projects/angular-redux-data/src/lib/redux-data-services/redux-data.actions.service';
 
 export class ApiRequest {
     token: string;
@@ -26,8 +28,7 @@ export class CruxAdapter extends DataAdapter {
     constructor(protected _http: HttpClient,
                 protected _host: string,
                 protected _path: string,
-                protected authUser: any,
-                protected _store: Store<ApplicationState>) {
+                protected _store: Store<any>) {
         super(_http, _host, _path, _store);
     }
 
@@ -72,7 +73,7 @@ export class CruxAdapter extends DataAdapter {
     deleteRecord(type: string, recordId: string | number): Observable<any> {
         const request = {
             id: recordId,
-            clientMasterId: this.authUser.clientMasterId,
+            // clientMasterId: this.authUser.clientMasterId,
             type: 'cancel'
         };
         return this._apiRequest(type, 'deleteItem', request).pipe(
@@ -101,6 +102,7 @@ export class CruxAdapter extends DataAdapter {
         const body = JSON.stringify(request);
         const headers = new HttpHeaders().set('Content-Type', 'text/plain');
         // const options = new RequestOptions({ headers: headers });
+        debugger;
         return this._http
             .post(url, body, {headers})
             .pipe(
@@ -114,7 +116,8 @@ export class CruxAdapter extends DataAdapter {
                 }),
                 catchError(error => {
                     if (error.error && error.error.status === 2) {
-                        // this._store.dispatch(new UnauthenticateUserAction());
+                        debugger;
+                        this._store.dispatch(new UnauthenticateUserAction());
                     }
                     console.error('BaseService._apiRequest: Error communicating with the API!', error);
                     return throwError(error);

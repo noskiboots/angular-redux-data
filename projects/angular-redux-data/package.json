@@ -2,7 +2,7 @@
   "name": "angular-redux-data",
   "author": "Kyle Snell (NoSkiBoots)",
   "license": "MIT",
-  "version": "0.1.2-pre-alpha",
+  "version": "0.0.1-beta",
   "dependencies": {
     "@ngrx/effects": "7.0.0",
     "@ngrx/entity": "7.0.0",

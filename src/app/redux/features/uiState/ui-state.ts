@@ -1,14 +1,19 @@
+import {Client} from '../../../../../shared/client';
 
 export interface UiState {
     userId: number;
     loggedInUser: any;
-    token: any;
+    currentClient: Client;
     currentError?: string;
+    authenticationFails?: number;
+    bottomPanelDisplayed: boolean;
 }
 
 export const INITIAL_UI_STATE: UiState = {
     userId: undefined,
     loggedInUser: JSON.parse(sessionStorage.getItem('authenticated_user')),
+    currentClient: undefined,
     currentError: undefined,
-    token: '9238hjlkajsdf0984ulkajsdf'
+    authenticationFails: 0,
+    bottomPanelDisplayed: false
 };
