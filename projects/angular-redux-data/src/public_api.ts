@@ -16,6 +16,6 @@ export * from './lib/redux-data-services/redux-data.selectors.service';
 export * from './lib/redux-data-services/redux-data-service-config';
 export * from './lib/redux-data-utilities/redux-data.actions.strings';
 export * from './lib/redux-data-utilities/redux-data.actions';
-export * from './lib/redux-data-utilities/redux-data.effects.interface';
+export * from './lib/redux-data-utilities/redux-data.effects';
 export * from './lib/angular-redux-data-layer.module';
 export * from './lib/angular-redux-data.module';

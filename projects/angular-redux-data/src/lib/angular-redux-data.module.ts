@@ -18,12 +18,11 @@ import {AngularReduxDataService} from './redux-data-services/angular-redux-data.
     ],
 })
 export class AngularReduxDataModule {
-    static forRoot(entityConfig: ReduxDataServiceConfig): ModuleWithProviders {
-        entityConfig.customReducers['ardTransaction'] = ardTransaction;
+    static forRoot(ardConfiguration: ReduxDataServiceConfig): ModuleWithProviders {
         return {
             ngModule: AngularReduxDataModule,
             providers: [
-                {provide: ReduxDataServiceConfig, useValue: entityConfig}
+                {provide: ReduxDataServiceConfig, useValue: ardConfiguration}
             ]
         };
     }
