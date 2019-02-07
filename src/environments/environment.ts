@@ -1,39 +1,42 @@
 import {CommentEffects} from '../app/redux/effects/comment.effects';
 import {PostEffects} from '../app/redux/effects/post.effects';
-import {ClientEffects} from '../app/redux/effects/client.effects';
-import {CruxAdapter} from '../app/adapters/crux.adapter';
+import {CatsAdapter} from '../app/adapters/cats.adapter';
 import {uiState} from '../app/redux/features/uiState/uiStateReducer';
 import {ProfileEffects} from '../app/redux/effects/profile.effects';
-import {AuthenticationEffects} from '../app/redux/effects/uiStateEffects';
+import {TicketMasterAdapter} from '../app/adapters/ticket-master.adapter';
+import {BreedEffects} from '../app/redux/effects/breed.effects';
+import {EventEffects} from '../app/redux/effects/event.effects';
 
 export const environment = {
     production: false,
     reduxDataServiceConfig: {
         effects: [
-            AuthenticationEffects,
             CommentEffects,
             PostEffects,
-            ClientEffects,
-            ProfileEffects
+            ProfileEffects,
+            BreedEffects,
+            EventEffects
         ],
         entityNameSpaces: [
             'posts',
             'comments',
             'clients',
             'profile',
-            'clients',
+            'breeds',
+            'events'
         ],
-        // defaultHost: 'https://jsonplaceholder.typicode.com',
-        defaultHost: 'http://localhost:3000',
+        defaultHost: 'https://jsonplaceholder.typicode.com',
         defaultPath: '',
         entityAdapterMappings: {
-            'clients': {
-                adapter: CruxAdapter,
-                host: 'https://development.appointment-plus.com/',
-                path: 'api/v2.0.18.1/Rest/',
-                config: {
-                    applicationInterface: 'e0c035f16c4b0cfdbc63972cd7e6edfd',
-                }
+            'breeds': {
+                adapter: CatsAdapter,
+                host: 'https://api.thecatapi.com',
+                path: 'v1'
+            },
+            'events': {
+                adapter: TicketMasterAdapter,
+                host: 'https://app.ticketmaster.com',
+                path: 'discovery/v1'
             }
         },
         customReducers: {
@@ -41,12 +44,3 @@ export const environment = {
         }
     }
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.

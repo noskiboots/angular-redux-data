@@ -11,8 +11,6 @@ export const UNAUTHENTICATION_SUCCESS = 'UNAUTHENTICATION_SUCCESS';
 export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
 export const UNAUTHENTICATE_USER = 'UNAUTHENTICATE_USER';
 
-export const LOADED_APPOINTMENT = 'LOADED_APPOINTMENT';
-
 export const UPDATE_MOBILE_REACTIVE_STATE = 'UPDATE MOBILE REACTIVE STATE';
 
 export const LOADED_CLIENT = 'LOADED_CLIENT';
@@ -66,15 +64,6 @@ export class ErrorOccurredAction implements Action {
     constructor(public payload?: string) {
 
     }
-}
-
-export class LoadedAppointmentAction implements Action {
-
-    readonly type = LOADED_APPOINTMENT;
-
-    constructor(public payload?: any) {
-    }
-
 }
 
 export class UpdateMobileReactiveStateAction implements Action {

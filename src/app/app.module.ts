@@ -8,7 +8,6 @@ import {StoreModule} from '@ngrx/store';
 import {ReduxDataReducerFactory} from '../../projects/angular-redux-data/src/lib/redux-data-factories/redux-data-reducer.factory';
 import {EffectsModule} from '@ngrx/effects';
 import {AngularReduxDataLayerModule} from '../../projects/angular-redux-data/src/lib/angular-redux-data-layer.module';
-import {AuthenticationService} from './services/authentication.service';
 import {uiState} from './redux/features/uiState/uiStateReducer';
 import {AuthenticationEffects} from './redux/effects/uiStateEffects';
 
@@ -19,20 +18,15 @@ import {AuthenticationEffects} from './redux/effects/uiStateEffects';
     imports: [
         BrowserModule,
         AngularReduxDataModule.forRoot(environment.reduxDataServiceConfig),
-        AngularReduxDataLayerModule.forRoot({
-            entityNameSpaces: environment.reduxDataServiceConfig.entityNameSpaces,
-            entityAdapterMappings: environment.reduxDataServiceConfig.entityAdapterMappings,
-            defaultHost: environment.reduxDataServiceConfig.defaultHost,
-            defaultPath: environment.reduxDataServiceConfig.defaultPath,
-        }),
+        AngularReduxDataLayerModule.forRoot(environment.reduxDataServiceConfig),
         StoreModule.forRoot(ReduxDataReducerFactory.getReducers(
             environment.reduxDataServiceConfig.entityNameSpaces,
             {'uiState': uiState})
         ),
-        EffectsModule.forRoot([...environment.reduxDataServiceConfig.effects, AuthenticationEffects]),
+        EffectsModule.forRoot(environment.reduxDataServiceConfig.effects),
         StoreDevtoolsModule.instrument(<StoreDevtoolsOptions>{maxAge: 25}),
     ],
-    providers: [AuthenticationService],
+    providers: [],
     bootstrap: [AppComponent]
 })
 export class AppModule {

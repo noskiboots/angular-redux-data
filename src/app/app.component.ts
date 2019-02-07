@@ -4,6 +4,7 @@ import {Client} from '../../shared/client';
 import {AngularReduxDataService} from '../../projects/angular-redux-data/src/lib/redux-data-services/angular-redux-data.service';
 import {take} from 'rxjs/operators';
 import {ArdTransaction} from '../../projects/angular-redux-data/src/lib/redux-data-transactions/ard-transaction';
+import {Breed} from '../../shared/breed';
 
 @Component({
     selector: 'app-root',
@@ -16,14 +17,14 @@ export class AppComponent implements OnInit {
     user: any;
     newlyCreatedPost;
     postList = [];
+    breeds: Breed[] = [];
+    events: Event[] = [];
 
     constructor(private _ard: AngularReduxDataService) {
     }
 
     ngOnInit() {
-        this._ard.findAll('clients').subscribe(clients => {
-        })
-        this._ard.findRecord('posts', 100).subscribe(post$ => {
+        this._ard.findRecord('posts', 1).subscribe(post$ => {
             this.post = post$;
             if (this.post) {
                 this._ard.queryAll('comments', {postId: this.post.id}).subscribe(comments$ => {
@@ -36,6 +37,18 @@ export class AppComponent implements OnInit {
             this.user = user$;
         });
         this._ard.peekAll('posts').subscribe(posts$ => this.postList = posts$);
+    }
+
+    findAllCatBreeds() {
+        this._ard.findAll('breeds').subscribe(breeds$ => this.breeds = breeds$);
+    }
+
+    findAllEvents() {
+        this._ard.findAll('events').subscribe(events$ => {
+            this.events = events$;
+        }, (err) => {
+            console.log(JSON.stringify(err));
+        });
     }
 
     findAll() {
@@ -72,7 +85,7 @@ export class AppComponent implements OnInit {
                     console.log(`delete ${stuff}`);
                     this.newlyCreatedPost = undefined;
                 }, (error: ArdTransaction) => {
-                   console.log(error.error.toString());
+                    console.log(error.error.toString());
                 });
         }
     }

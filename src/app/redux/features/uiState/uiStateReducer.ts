@@ -5,9 +5,7 @@ import {
     AUTHENTICATION_SUCCESS,
     ERROR_OCCURRED_ACTION,
     ErrorOccurredAction,
-    LOADED_APPOINTMENT,
-    LOADED_CLIENT,
-    LoadedAppointmentAction, LoadedClientAction, UNAUTHENTICATE_USER,
+    LOADED_CLIENT, LoadedClientAction, UNAUTHENTICATE_USER,
     UNAUTHENTICATION_SUCCESS, UPDATE_MOBILE_REACTIVE_STATE, UpdateMobileReactiveStateAction,
     UserAuthenticationSuccessAction
 } from './uiStateActions';
@@ -20,10 +18,8 @@ export function uiState(state: UiState = INITIAL_UI_STATE, action: Action): UiSt
             case AUTHENTICATION_FAILED:
             return handleSetAuthenticationError(state, <any>action);
         case UNAUTHENTICATION_SUCCESS:
-            debugger;
             return handleUnauthenticatedUserAction(state);
         case UNAUTHENTICATE_USER:
-            debugger;
             return handleUnauthenticatedUserAction(state);
         case LOADED_CLIENT:
             return handleLoadedClient(state, <any>action);

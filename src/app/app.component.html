@@ -18,6 +18,8 @@
 </div>
 
     <button (click)="findAll()">Get All Posts</button>
+    <button (click)="findAllCatBreeds()">Get All Breeds</button>
+    <button (click)="findAllEvents()">Get All Events</button>
     <button (click)="create()">Create</button>
     <button (click)="update1()">Update 1</button>
     <button (click)="create2()">Create 2</button>
@@ -29,3 +31,15 @@
         </ul>
     </div>
 
+
+<div>
+    <ul>
+        <li *ngFor="let breed of breeds">{{breed.name}}</li>
+    </ul>
+</div>
+
+<div>
+    <ul>
+        <li *ngFor="let event of events">{{event.name}}</li>
+    </ul>
+</div>

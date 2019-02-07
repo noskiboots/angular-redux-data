@@ -7,6 +7,7 @@ export interface UiState {
     currentError?: string;
     authenticationFails?: number;
     bottomPanelDisplayed: boolean;
+    ticketMasterApiKey: string;
 }
 
 export const INITIAL_UI_STATE: UiState = {
@@ -15,5 +16,6 @@ export const INITIAL_UI_STATE: UiState = {
     currentClient: undefined,
     currentError: undefined,
     authenticationFails: 0,
-    bottomPanelDisplayed: false
+    bottomPanelDisplayed: false,
+    ticketMasterApiKey: 'OJWqORq2NZsYtVtpUl5EbNIdALoqPF2P'
 };
