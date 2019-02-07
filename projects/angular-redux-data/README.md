@@ -10,7 +10,7 @@ However, this knowledge is not required if the application will only be using AR
 
 ## Project Status
 
-~~Initialized~~ -> **Under Construction** -> Alpha -> Beta -> Production
+~~Initialized~~ -> ~~Under Construction~~ -> ~~Alpha~~ -> **Beta** -> Production
 
 ## Getting Started
 
