@@ -2,7 +2,10 @@
   "name": "angular-redux-data",
   "author": "Kyle Snell (NoSkiBoots)",
   "license": "MIT",
-  "version": "0.0.3-beta",
+  "description": "A Redux based data layer framework for Angular Application",
+  "url" : "https://github.com/noskiboots/angular-redux-data",
+  "email": "noskiboots@gmail.com",
+  "version": "0.1.0",
   "dependencies": {
     "@ngrx/effects": "7.0.0",
     "@ngrx/entity": "7.0.0",

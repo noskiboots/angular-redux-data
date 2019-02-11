@@ -1,5 +1,8 @@
 # Angular Redux Data
 
+[![Join the chat at https://gitter.im/angular-redux-data/community](https://badges.gitter.im/angular-redux-data/community.svg)](https://gitter.im/angular-redux-data/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+
 This project is intended to provide a complete data layer framework for Angular 7+ applications. Angular Redux Data (ARD)
 utilizes [@ngrx](https://github.com/ngrx/platform) and relative libraries to provide redux state management without the developer 
 needing to create excessive and redundant boilerplate code for a standard data schema. The framework also provides a 
