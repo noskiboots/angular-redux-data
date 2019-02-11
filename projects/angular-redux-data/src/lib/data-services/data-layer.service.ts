@@ -3,13 +3,13 @@ import {HttpClient} from '@angular/common/http';
 import {Store} from '@ngrx/store';
 import {DataLayerConfig} from './data-layer-config';
 import {ApplicationHttpAdapter} from '../data-adapters/application-http-adapter';
-import {ReduxDataServiceConfig} from '../redux-data-services/redux-data-service-config';
+import {AngularReduxDataServiceConfig} from '../redux-services/angular-redux-data-service-config';
 
 @Injectable()
 export class DataLayerService {
     public adapters = {};
 
-    constructor(@Optional() dataLayerConfig: ReduxDataServiceConfig,
+    constructor(@Optional() dataLayerConfig: AngularReduxDataServiceConfig,
                 protected _http: HttpClient,
                 private _store: Store<any>) {
         dataLayerConfig.entityNameSpaces.forEach(entity => {

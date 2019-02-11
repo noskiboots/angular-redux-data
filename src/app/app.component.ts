@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Post} from '../../shared/post';
 import {Client} from '../../shared/client';
-import {AngularReduxDataService} from '../../projects/angular-redux-data/src/lib/redux-data-services/angular-redux-data.service';
+import {AngularReduxDataService} from '../../projects/angular-redux-data/src/lib/redux-services/angular-redux-data.service';
 import {take} from 'rxjs/operators';
-import {ArdTransaction} from '../../projects/angular-redux-data/src/lib/redux-data-transactions/ard-transaction';
+import {ArdTransaction} from '../../projects/angular-redux-data/src/lib/redux-transactions/ard-transaction';
 import {Breed} from '../../shared/breed';
 
 @Component({
@@ -48,6 +48,11 @@ export class AppComponent implements OnInit {
             this.events = events$;
         }, (err) => {
             console.log(JSON.stringify(err));
+        });
+    }
+
+    peekCatBreed() {
+        this._ard.peekBy('breeds', {name: 'Balinese'}).subscribe(selection => {
         });
     }
 

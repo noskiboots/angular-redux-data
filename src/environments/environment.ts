@@ -9,7 +9,7 @@ import {EventEffects} from '../app/redux/effects/event.effects';
 
 export const environment = {
     production: false,
-    reduxDataServiceConfig: {
+    angularReduxDataServiceConfig: {
         effects: [
             CommentEffects,
             PostEffects,

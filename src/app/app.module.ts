@@ -5,7 +5,7 @@ import {AngularReduxDataModule} from '../../projects/angular-redux-data/src/lib/
 import {environment} from '../environments/environment';
 import {StoreDevtoolsModule, StoreDevtoolsOptions} from '@ngrx/store-devtools';
 import {StoreModule} from '@ngrx/store';
-import {ReduxDataReducerFactory} from '../../projects/angular-redux-data/src/lib/redux-data-factories/redux-data-reducer.factory';
+import {ReduxDataReducerFactory} from '../../projects/angular-redux-data/src/lib/redux-factories/redux-data-reducer.factory';
 import {EffectsModule} from '@ngrx/effects';
 import {AngularReduxDataLayerModule} from '../../projects/angular-redux-data/src/lib/angular-redux-data-layer.module';
 import {uiState} from './redux/features/uiState/uiStateReducer';
@@ -17,13 +17,12 @@ import {AuthenticationEffects} from './redux/effects/uiStateEffects';
     ],
     imports: [
         BrowserModule,
-        AngularReduxDataModule.forRoot(environment.reduxDataServiceConfig),
-        AngularReduxDataLayerModule.forRoot(environment.reduxDataServiceConfig),
+        AngularReduxDataModule.forRoot(environment.angularReduxDataServiceConfig),
+        AngularReduxDataLayerModule.forRoot(environment.angularReduxDataServiceConfig),
         StoreModule.forRoot(ReduxDataReducerFactory.getReducers(
-            environment.reduxDataServiceConfig.entityNameSpaces,
-            {'uiState': uiState})
+            environment.angularReduxDataServiceConfig)
         ),
-        EffectsModule.forRoot(environment.reduxDataServiceConfig.effects),
+        EffectsModule.forRoot(environment.angularReduxDataServiceConfig.effects),
         StoreDevtoolsModule.instrument(<StoreDevtoolsOptions>{maxAge: 25}),
     ],
     providers: [],

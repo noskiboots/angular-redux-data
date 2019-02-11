@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import {getEntityActionStrings} from '../redux-data-utilities/redux-data.actions.strings';
+import {getEntityActionStrings} from '../redux-utilities/redux-data.actions.strings';
 
 export const actionStrings = getEntityActionStrings('transaction');
 

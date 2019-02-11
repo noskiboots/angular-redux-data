@@ -1,11 +1,11 @@
 import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ReduxDataActionsService} from './redux-data-services/redux-data.actions.service';
-import {ReduxDataSelectorsService} from './redux-data-services/redux-data.selectors.service';
-import {ReduxDataServiceConfig} from './redux-data-services/redux-data-service-config';
+import {ReduxDataActionsService} from './redux-services/redux-data.actions.service';
+import {ReduxDataSelectorsService} from './redux-services/redux-data.selectors.service';
+import {AngularReduxDataServiceConfig} from './redux-services/angular-redux-data-service-config';
 import {AngularReduxDataLayerModule} from './angular-redux-data-layer.module';
-import {ardTransaction} from './redux-data-transactions/ard-transaction.reducer';
-import {AngularReduxDataService} from './redux-data-services/angular-redux-data.service';
+import {ardTransaction} from './redux-transactions/ard-transaction.reducer';
+import {AngularReduxDataService} from './redux-services/angular-redux-data.service';
 
 @NgModule({
     imports: [CommonModule,
@@ -18,11 +18,11 @@ import {AngularReduxDataService} from './redux-data-services/angular-redux-data.
     ],
 })
 export class AngularReduxDataModule {
-    static forRoot(ardConfiguration: ReduxDataServiceConfig): ModuleWithProviders {
+    static forRoot(ardConfiguration: AngularReduxDataServiceConfig): ModuleWithProviders {
         return {
             ngModule: AngularReduxDataModule,
             providers: [
-                {provide: ReduxDataServiceConfig, useValue: ardConfiguration}
+                {provide: AngularReduxDataServiceConfig, useValue: ardConfiguration}
             ]
         };
     }

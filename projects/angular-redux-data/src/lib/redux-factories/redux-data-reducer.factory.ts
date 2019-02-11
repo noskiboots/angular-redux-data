@@ -1,7 +1,8 @@
 import {ActionReducerMap} from '@ngrx/store';
 import {createEntityAdapter} from '@ngrx/entity';
-import {getEntityActionStrings} from '../redux-data-utilities/redux-data.actions.strings';
-import {ardTransaction} from '../redux-data-transactions/ard-transaction.reducer';
+import {getEntityActionStrings} from '../redux-utilities/redux-data.actions.strings';
+import {ardTransaction} from '../redux-transactions/ard-transaction.reducer';
+import {AngularReduxDataServiceConfig} from '../redux-services/angular-redux-data-service-config';
 
 export class EntityReducer {
     actionStrings;
@@ -44,16 +45,16 @@ export class EntityReducer {
 }
 
 export class ReduxDataReducerFactory {
-    static getReducers(nameSpaceArray: string[], customReducers?) {
+    static getReducers(config: AngularReduxDataServiceConfig) {
         const dynamicEntityReducers: ActionReducerMap<any> = {};
-        nameSpaceArray.forEach(nameSpace => {
+        config.entityNameSpaces.forEach(nameSpace => {
             const newInstance = new EntityReducer(getEntityActionStrings(nameSpace), nameSpace);
             dynamicEntityReducers[nameSpace] = newInstance.reducer;
         });
 
-        if (customReducers) {
-            Object.keys(customReducers).forEach(key => {
-                dynamicEntityReducers[key] = customReducers[key];
+        if (config.customReducers && Object.keys(config.customReducers).length > 0) {
+            Object.keys(config.customReducers).forEach(key => {
+                dynamicEntityReducers[key] = config.customReducers[key];
             });
         }
         const transactionInstance = new EntityReducer(getEntityActionStrings('ardTransaction'), 'ardTransaction');

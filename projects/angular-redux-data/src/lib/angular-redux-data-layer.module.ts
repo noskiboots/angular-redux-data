@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {DataLayerService} from './data-services/data-layer.service';
 import {DataLayerConfig} from './data-services/data-layer-config';
 import {HttpClientModule} from '@angular/common/http';
-import {ReduxDataServiceConfig} from './redux-data-services/redux-data-service-config';
+import {AngularReduxDataServiceConfig} from './redux-services/angular-redux-data-service-config';
 
 @NgModule({
     imports: [CommonModule,
@@ -13,11 +13,11 @@ import {ReduxDataServiceConfig} from './redux-data-services/redux-data-service-c
     ]
 })
 export class AngularReduxDataLayerModule {
-    static forRoot(ardConfiguration: ReduxDataServiceConfig): ModuleWithProviders {
+    static forRoot(ardConfiguration: AngularReduxDataServiceConfig): ModuleWithProviders {
         return {
             ngModule: AngularReduxDataLayerModule,
             providers: [
-                {provide: ReduxDataServiceConfig, useValue: ardConfiguration}
+                {provide: AngularReduxDataServiceConfig, useValue: ardConfiguration}
             ]
         };
     }

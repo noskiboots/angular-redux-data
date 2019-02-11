@@ -1,7 +1,7 @@
 import {Injectable, Optional} from '@angular/core';
 import {createFeatureSelector, createSelector} from '@ngrx/store';
 import * as _ from 'lodash';
-import {ReduxDataServiceConfig} from './redux-data-service-config';
+import {AngularReduxDataServiceConfig} from './angular-redux-data-service-config';
 import {createEntityAdapter} from '@ngrx/entity';
 
 export class EntitySelector {
@@ -36,7 +36,7 @@ export class ReduxDataSelectorsService {
         return this._selectors[nameSpace];
     }
 
-    constructor(@Optional() entityConfig: ReduxDataServiceConfig) {
+    constructor(@Optional() entityConfig: AngularReduxDataServiceConfig) {
         if (entityConfig) {
             this._entityNameSpaces = entityConfig.entityNameSpaces;
             this.selectorsFactory();

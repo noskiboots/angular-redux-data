@@ -1,6 +1,6 @@
 import {Action} from '@ngrx/store';
 import {getEntityActionStrings} from './redux-data.actions.strings';
-import {EntityActions} from '../redux-data-services/redux-data.actions.service';
+import {EntityActions} from '../redux-services/redux-data.actions.service';
 
 
 export class FindAll implements Action {

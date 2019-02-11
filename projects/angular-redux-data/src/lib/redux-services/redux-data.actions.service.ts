@@ -1,10 +1,10 @@
 import {Injectable, Optional} from '@angular/core';
-import * as entityActions from '../redux-data-utilities/redux-data.actions';
-import {getEntityActionStrings} from '../redux-data-utilities/redux-data.actions.strings';
+import * as entityActions from '../redux-utilities/redux-data.actions';
+import {getEntityActionStrings} from '../redux-utilities/redux-data.actions.strings';
 import {Actions, ofType} from '@ngrx/effects';
 import {Action} from '@ngrx/store';
 import {catchError, map, switchMap} from 'rxjs/operators';
-import {ReduxDataServiceConfig} from './redux-data-service-config';
+import {AngularReduxDataServiceConfig} from './angular-redux-data-service-config';
 import {Observable, of} from 'rxjs';
 import {DataLayerService} from '../data-services/data-layer.service';
 import {flatMap} from 'rxjs/internal/operators';
@@ -26,7 +26,7 @@ export class ReduxDataActionsService {
         return this._actions;
     }
 
-    constructor(@Optional() entityConfig: ReduxDataServiceConfig) {
+    constructor(@Optional() entityConfig: AngularReduxDataServiceConfig) {
         if (entityConfig) {
             this._entityNameSpaces = entityConfig.entityNameSpaces;
             this._entityNameSpaces.push('ardTransaction');

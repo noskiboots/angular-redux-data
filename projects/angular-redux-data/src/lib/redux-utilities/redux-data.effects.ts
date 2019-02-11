@@ -1,5 +1,5 @@
 import {Actions, Effect} from '@ngrx/effects';
-import {ReduxDataActionsService} from '../redux-data-services/redux-data.actions.service';
+import {ReduxDataActionsService} from '../redux-services/redux-data.actions.service';
 import {DataLayerService} from '../data-services/data-layer.service';
 
 export abstract class AngularReduxDataEffect {

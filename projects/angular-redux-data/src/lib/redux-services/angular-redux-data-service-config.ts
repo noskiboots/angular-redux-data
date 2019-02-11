@@ -1,11 +1,5 @@
-class AdapterMap {
-    adapter: any;
-    config: any;
-    host: string;
-    path: string;
-}
 
-export class ReduxDataServiceConfig {
+export class AngularReduxDataServiceConfig {
     entityNameSpaces: string[];
     entityAdapterMappings: any;
     defaultHost: string;
