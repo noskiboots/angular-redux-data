@@ -27,7 +27,7 @@ export class EntityReducer {
             case this.actionStrings.FIND_ALL_SUCCESS:
                 return this.adapter.addAll(action.data, state);
             case this.actionStrings.QUERY_ALL_SUCCESS:
-                return this.adapter.addAll(action.data, state);
+                return this.adapter.addMany(action.data, state);
             case this.actionStrings.FIND_RECORD_SUCCESS:
                 return this.adapter.addOne(action.data, state);
             case this.actionStrings.UPDATE_SUCCESS:
