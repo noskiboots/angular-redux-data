@@ -1,11 +1,24 @@
 {
   "name": "angular-redux-data",
-  "author": "Kyle Snell (NoSkiBoots)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noskiboots/angular-redux-data.git"
+  },
+  "keywords": [
+    "redux",
+    "angular",
+    "data",
+    "api",
+    "rxjs",
+    "ard",
+    "AngularReduxData"
+  ],
+  "author": "Kyle Snell (NoSkiBoots) <noskiboots@gmail.com>",
   "license": "MIT",
   "description": "A Redux based data layer framework for Angular Application",
   "url" : "https://github.com/noskiboots/angular-redux-data",
   "email": "noskiboots@gmail.com",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "dependencies": {
     "@ngrx/effects": "7.0.0",
     "@ngrx/entity": "7.0.0",
