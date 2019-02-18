@@ -2,7 +2,7 @@
   "name": "angular-redux-data",
   "author": "Kyle Snell (NoSkiBoots)",
   "license": "MIT",
-  "version": "0.0.0",
+  "version": "0.1.4",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -14,7 +14,9 @@
     "npm-pack": "cd dist/angular-redux-data && npm pack",
     "package": "npm run build-lib && npm run npm-pack",
     "npm-publish": "cd dist/angular-redux-data && npm publish",
-    "package:publish": "npm run package && npm run npm-publish && cd ../../"
+    "npm-publish-beta": "cd dist/angular-redux-data && npm publish --tag beta",
+    "package:publish-latest": "npm run package && npm run npm-publish && cd ../../",
+    "package:publish-beta": "npm run package && npm run npm-publish-beta && cd ../../"
   },
   "private": true,
   "dependencies": {
